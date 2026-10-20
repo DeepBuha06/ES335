@@ -1,0 +1,11 @@
+seed: 0
+workers: 8
+min_tokens: 10            # D3, processed tokens excl. BOS/EOS
+max_tokens: 870           # D3, ~99th percentile of raw token counts
+target_total: 100000      # D4
+test_ood_repo_frac: 0.10  # D1
+val_repo_frac: 0.05       # D1
+test_id_size: 5000        # D1, from train repos with >= 2 functions
+vocab_size: 10000         # top-k from train only, plus <PAD> <UNK> <BOS> <EOS>
+roundtrip_min_rate: 0.99
+processed_dir: data/processed
