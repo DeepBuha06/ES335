@@ -1,0 +1,13 @@
+# torch from PyPI: Linux wheels are the CUDA 12.8 build (pypi.nvidia.com / cu128 index timed out on this network)
+torch==2.8.0
+numpy>=1.26
+pandas>=2.2
+pyarrow>=16
+datasets>=3.0
+huggingface_hub>=0.24
+scikit-learn>=1.5
+matplotlib>=3.9
+pyyaml>=6
+pytest>=8
+tqdm>=4.66
+psutil>=5.9

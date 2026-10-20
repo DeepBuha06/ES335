@@ -1,0 +1,16 @@
+# CodeSearchNet Python, official HF repo, native parquet (no loading script)
+hf_repo: code-search-net/code_search_net
+revision: bd0cf261e357a3eb5c8fba490d23ec1a1cd59555   # pinned commit sha
+files:
+  train: python/train-00000-of-00001.parquet
+  validation: python/validation-00000-of-00001.parquet
+  test: python/test-00000-of-00001.parquet
+raw_dir: data/raw/codesearchnet_python
+seed: 0
+recon:
+  length_percentiles: [50, 75, 90, 95, 99, 99.9]
+  workers: 8
+sha256:   # from HF LFS oids at the pinned revision; verified locally 2026-10-20
+  train: ad9e3a4ab10c2c1d8926d2b26ca2bfcc3aadda1477ba29a933391f93806b9fed
+  validation: 22eaacb46ed7e74d582409b85692ef63f5a43e99f9395c2eb736b5c8451422bb
+  test: 3167e79ee7f081d825bf97b96d3a6b2d96428b00f6a98125be943384d8afae5f
