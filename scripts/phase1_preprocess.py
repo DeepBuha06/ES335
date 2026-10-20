@@ -22,7 +22,7 @@ import yaml
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from src.data.load import load_config, load_splits
 from src.data.splits import sample_by_repo, split_repos
-from src.data.tokenizer import UNK, Vocab, code_to_tokens, tokens_to_code
+from src.data.tokenizer import RESERVED, UNK, Vocab, code_to_tokens, tokens_to_code
 
 META = ["repository_name", "func_path_in_repository", "func_name", "split_name"]
 SPLITS = ["train", "val", "test_id", "test_ood"]
@@ -99,8 +99,8 @@ def main():
                     "remaining": len(df), "repos_remaining": int(df.repository_name.nunique())}
 
     # ---- sample ~100k by repo, then split
-    sample, k = sample_by_repo(df, cfg["target_total"], cfg["seed"])
-    rep["sampling"] = {"repo_cap_K": int(k), "n_sampled": len(sample),
+    sample = sample_by_repo(df, cfg["target_total"], cfg["max_per_repo"], cfg["seed"])
+    rep["sampling"] = {"max_per_repo": cfg["max_per_repo"], "n_sampled": len(sample),
                        "n_repos": int(sample.repository_name.nunique()),
                        "max_repo_share": float(sample.repository_name.value_counts(normalize=True).iloc[0])}
     sample = split_repos(sample, cfg["test_ood_repo_frac"], cfg["val_repo_frac"], cfg["test_id_size"], cfg["seed"])
@@ -118,7 +118,9 @@ def main():
     rep["roundtrip"]["fail_examples"] = sample.loc[~rt_ok, "whole_func_string"].head(3).str[:300].tolist()
     rep["vocab"] = {"size_incl_specials": len(vocab), "train_types": len(counts),
                     "train_token_coverage": float(sum(counts[t] for t in vocab.itos if t in counts) / sum(counts.values())),
-                    "min_count_in_vocab": int(min(counts[t] for t in vocab.itos[4:]))}
+                    "reserved_grammar_tokens": len(RESERVED),
+                    "reserved_unseen_in_train": [t for t in RESERVED if counts[t] == 0],
+                    "min_count_frequency_part": int(min(counts[t] for t in vocab.itos[4 + len(RESERVED):]))}
 
     # ---- per-split stats and save
     out = Path(cfg["processed_dir"])

@@ -2,8 +2,8 @@ import ast
 
 import pytest
 
-from src.data.tokenizer import (DEDENT, INDENT, NEWLINE, NUM, STR, UNK, Vocab,
-                                code_to_tokens, tokens_to_code)
+from src.data.tokenizer import (DEDENT, INDENT, NEWLINE, NUM, RESERVED, SPECIALS, STR,
+                                Vocab, code_to_tokens, tokens_to_code)
 
 CASES = [
     'def f(x):\n    """doc"""\n    return x + 1\n',
@@ -40,3 +40,10 @@ def test_unk_roundtrip():
     ids = vocab.encode(toks)
     assert vocab.unk_id in ids
     ast.parse(tokens_to_code(vocab.decode(ids)))
+
+
+def test_vocab_reserves_grammar_tokens():
+    vocab = Vocab.build([["x", "y", "x"]], size=len(RESERVED) + 1)[0]
+    assert len(vocab) == len(SPECIALS) + len(RESERVED) + 1
+    assert all(vocab.stoi.get(t) is not None for t in ("<<=", "**=", "nonlocal", ":="))
+    assert vocab.encode(["y"]) == [vocab.unk_id]

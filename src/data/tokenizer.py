@@ -7,6 +7,8 @@ tokens_to_code: token strings -> source that `ast.parse` can check.
 import ast
 import io
 import json
+import keyword
+import token
 import tokenize
 from collections import Counter
 
@@ -17,6 +19,10 @@ SPECIALS = [PAD, UNK, BOS, EOS]  # ids 0..3
 
 SUBSTITUTE = {STR: '"s"', NUM: "0"}
 UNK_NAME = "unk_tok"
+
+# grammar tokens always kept in the vocabulary (never <UNK>)
+RESERVED = sorted(set(keyword.kwlist) | set(keyword.softkwlist) | set(token.EXACT_TOKEN_TYPES)
+                  | {STR, NUM, NEWLINE, INDENT, DEDENT})
 
 _DROP = {tokenize.COMMENT, tokenize.NL, tokenize.ENCODING, tokenize.ENDMARKER}
 _LAYOUT = {tokenize.NEWLINE: NEWLINE, tokenize.INDENT: INDENT, tokenize.DEDENT: DEDENT}
@@ -134,10 +140,13 @@ class Vocab:
         self.unk_id = self.stoi[UNK]
 
     @classmethod
-    def build(cls, token_lists, size):
+    def build(cls, token_lists, size, reserved=RESERVED):
+        """SPECIALS + reserved grammar tokens + most frequent other tokens, `size` tokens besides SPECIALS."""
         counts = Counter(t for toks in token_lists for t in toks)
-        top = [t for t, _ in sorted(counts.items(), key=lambda kv: (-kv[1], kv[0])) if t not in SPECIALS][:size]
-        return cls(SPECIALS + top), counts
+        reserved = [t for t in reserved if t not in SPECIALS]
+        rest = [t for t, _ in sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))
+                if t not in SPECIALS and t not in set(reserved)]
+        return cls(SPECIALS + reserved + rest[:size - len(reserved)]), counts
 
     def encode(self, tokens):
         return [self.stoi.get(t, self.unk_id) for t in tokens]

@@ -3,6 +3,7 @@ workers: 8
 min_tokens: 10            # D3, processed tokens excl. BOS/EOS
 max_tokens: 870           # D3, ~99th percentile of raw token counts
 target_total: 100000      # D4
+max_per_repo: 50          # D4, chosen by Deep (K=11 gave too few functions per repo for test_id)
 test_ood_repo_frac: 0.10  # D1
 val_repo_frac: 0.05       # D1
 test_id_size: 5000        # D1, from train repos with >= 2 functions

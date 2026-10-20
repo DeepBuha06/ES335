@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from src.data.splits import repo_cap, sample_by_repo, split_repos
+from src.data.splits import sample_by_repo, split_repos
 
 PROCESSED = Path("data/processed")
 
@@ -17,15 +17,10 @@ def _toy(seed=0):
                          "func_name": [f"f{i}" for i in range(len(repos))]})
 
 
-def test_repo_cap_is_minimal():
-    counts = np.array([1, 5, 50, 500])
-    k = repo_cap(counts, 100)
-    assert np.minimum(counts, k).sum() >= 100 > np.minimum(counts, k - 1).sum()
-
-
 def test_toy_split_disjoint_and_test_id_in_train_repos():
-    sample, k = sample_by_repo(_toy(), 4000, seed=0)
-    assert len(sample) == 4000 and sample.groupby("repository_name").size().max() <= k
+    sample = sample_by_repo(_toy(), 4000, max_per_repo=25, seed=0)
+    assert len(sample) == 4000 and sample.groupby("repository_name").size().max() <= 25
+    assert sample.index.is_unique
     df = split_repos(sample, 0.1, 0.05, 300, seed=0)
     repos = {s: set(df.loc[df.split == s, "repository_name"]) for s in ("train", "val", "test_ood", "test_id")}
     assert not repos["train"] & repos["val"] and not repos["train"] & repos["test_ood"] and not repos["val"] & repos["test_ood"]

@@ -3,26 +3,19 @@ import numpy as np
 import pandas as pd
 
 
-def repo_cap(counts, target):
-    """Smallest K with sum(min(n_repo, K)) >= target."""
-    lo, hi = 1, int(counts.max())
-    while lo < hi:
-        mid = (lo + hi) // 2
-        if np.minimum(counts, mid).sum() >= target:
-            hi = mid
-        else:
-            lo = mid + 1
-    return lo
-
-
-def sample_by_repo(df, target, seed):
-    """Cap each repo at K functions, then subsample uniformly to `target`. Returns (sample, K)."""
+def sample_by_repo(df, target, max_per_repo, seed):
+    """Visit repos in random order, take up to `max_per_repo` random functions from each
+    until `target` is reached, then subsample uniformly to exactly `target`."""
     rng = np.random.default_rng(seed)
-    k = repo_cap(df.groupby("repository_name").size().values, target)
     shuffled = df.iloc[rng.permutation(len(df))]
-    capped = shuffled[shuffled.groupby("repository_name").cumcount() < k]
-    sample = capped.iloc[rng.permutation(len(capped))[:target]]
-    return sample.sort_values(["repository_name", "func_path_in_repository", "func_name"]), k
+    capped = shuffled[shuffled.groupby("repository_name").cumcount() < max_per_repo]
+    repos = np.array(sorted(capped["repository_name"].unique()))
+    repos = repos[rng.permutation(len(repos))]
+    sizes = capped["repository_name"].value_counts().reindex(repos).values
+    n_repos = int(np.searchsorted(np.cumsum(sizes), target)) + 1
+    chosen = capped[capped["repository_name"].isin(set(repos[:n_repos]))]
+    sample = chosen.iloc[rng.permutation(len(chosen))[:target]]
+    return sample.sort_values(["repository_name", "func_path_in_repository", "func_name"])
 
 
 def split_repos(df, ood_frac, val_frac, test_id_size, seed):

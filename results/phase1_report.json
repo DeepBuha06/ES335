@@ -1,0 +1,129 @@
+{
+  "seed": 0,
+  "config": {
+    "seed": 0,
+    "workers": 8,
+    "min_tokens": 10,
+    "max_tokens": 870,
+    "target_total": 100000,
+    "max_per_repo": 50,
+    "test_ood_repo_frac": 0.1,
+    "val_repo_frac": 0.05,
+    "test_id_size": 5000,
+    "vocab_size": 10000,
+    "roundtrip_min_rate": 0.99,
+    "processed_dir": "data/processed"
+  },
+  "n_pooled": 457461,
+  "filter": {
+    "ast_fail": 4529,
+    "tokenize_fail": 0,
+    "docstrings": {
+      "docstring_stripped": 458239,
+      "pass_inserted": 128
+    },
+    "processed_len_percentiles": {
+      "1": 29.0,
+      "5": 33.0,
+      "50": 85.0,
+      "95": 389.0,
+      "99": 804.0,
+      "99.9": 2021.069000000076
+    },
+    "max_tokens_is_percentile": 99.16477528635646,
+    "too_short": 0,
+    "too_long": 3783
+  },
+  "dedup": {
+    "exact_removed": 0,
+    "near_removed": 35,
+    "near_dup_groups_spanning_repos": 21,
+    "remaining": 449114,
+    "repos_remaining": 13537
+  },
+  "sampling": {
+    "max_per_repo": 50,
+    "n_sampled": 100000,
+    "n_repos": 5908,
+    "max_repo_share": 0.0005
+  },
+  "roundtrip": {
+    "rate_raw_tokens": 1.0,
+    "fail_raw_tokens": 0,
+    "rate_after_vocab_unk": 1.0,
+    "fail_after_vocab_unk": 0,
+    "fail_examples": []
+  },
+  "vocab": {
+    "size_incl_specials": 10004,
+    "train_types": 242065,
+    "train_token_coverage": 0.923917795870905,
+    "reserved_grammar_tokens": 92,
+    "reserved_unseen_in_train": [
+      "!",
+      ":=",
+      "@="
+    ],
+    "min_count_frequency_part": 20
+  },
+  "splits": {
+    "train": {
+      "n_functions": 79261,
+      "n_repos": 5022,
+      "n_tokens": 9487212,
+      "unk_rate": 0.07608220412909504,
+      "functions_with_unk": 0.9605228296387883,
+      "orig_csn_split": {
+        "train": 71462,
+        "test": 4090,
+        "valid": 3709
+      }
+    },
+    "val": {
+      "n_functions": 5103,
+      "n_repos": 295,
+      "n_tokens": 611502,
+      "unk_rate": 0.08861949756501206,
+      "functions_with_unk": 0.9659024103468548,
+      "orig_csn_split": {
+        "train": 4618,
+        "test": 304,
+        "valid": 181
+      }
+    },
+    "test_id": {
+      "n_functions": 5000,
+      "n_repos": 2389,
+      "n_tokens": 589274,
+      "unk_rate": 0.08083166744163156,
+      "functions_with_unk": 0.9676,
+      "orig_csn_split": {
+        "train": 4468,
+        "test": 285,
+        "valid": 247
+      }
+    },
+    "test_ood": {
+      "n_functions": 10636,
+      "n_repos": 591,
+      "n_tokens": 1271715,
+      "unk_rate": 0.08982594370594041,
+      "functions_with_unk": 0.9698194810078977,
+      "orig_csn_split": {
+        "train": 9812,
+        "valid": 478,
+        "test": 346
+      }
+    }
+  },
+  "repo_overlap": {
+    "train&val": 0,
+    "train&test_id": 2389,
+    "train&test_ood": 0,
+    "val&test_id": 0,
+    "val&test_ood": 0,
+    "test_id&test_ood": 0
+  },
+  "runtime_s": 46.8,
+  "peak_rss_gb_main": 2.92
+}
