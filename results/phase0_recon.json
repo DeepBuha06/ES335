@@ -190,6 +190,6 @@
   },
   "n_repos_total": 13590,
   "n_functions_total": 457461,
-  "runtime_s": 30.7,
-  "peak_rss_gb_main": 4.08
+  "runtime_s": 36.8,
+  "peak_rss_gb_main": 3.74
 }
