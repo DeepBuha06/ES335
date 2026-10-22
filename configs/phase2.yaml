@@ -1,0 +1,9 @@
+seed: 0
+orders: [2, 3, 4, 5]        # order n = n-1 context tokens
+hash_seed: 0
+kind: modified               # main baseline: modified Kneser-Ney (three discounts per order)
+ablation_kind: single       # also reported: one discount per order
+train_subset_functions: 5000   # in-sample perplexity reference
+norm_check_real_contexts: 10
+norm_check_random_contexts: 5  # random token contexts (mostly unseen)
+model_dir: data/processed
