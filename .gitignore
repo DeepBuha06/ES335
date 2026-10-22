@@ -4,6 +4,7 @@
 *.pt
 *.ckpt
 *.onnx
+!site/model/*.onnx
 checkpoints/
 logs/*.log
 # env
@@ -18,4 +19,5 @@ CLAUDE.md
 PROGRESS.md
 DECISIONS.md
 CHECKPOINTS.md
+GIT_TODO.md
 .claude/

@@ -1,0 +1,34 @@
+{
+ "background": "#0c0d0f",
+ "panel": "#131519",
+ "band": "#0f1114",
+ "ink": "#e6e8eb",
+ "ink_secondary": "#9aa0a8",
+ "hairline": "#24272d",
+ "rule": "#3a3f47",
+ "raised": "#1b1e24",
+ "chip": "#23272e",
+ "active": "#1a1d22",
+ "muted": "#6c727b",
+ "body": "#cfd3d8",
+ "invalid": "#ff6b7a",
+ "ngram": {
+  "2": "#5d636d",
+  "3": "#7d8490",
+  "4": "#a0a7b3",
+  "5": "#c7cdd8"
+ },
+ "mlp": {
+  "3": "#2f6aa3",
+  "5": "#3f8fd6",
+  "10": "#62b4f5",
+  "20": "#a8dcff"
+ },
+ "fail": {
+  "unbalanced brackets": "#ff6b7a",
+  "indentation": "#c2495a",
+  "incomplete statement": "#7f3441",
+  "other": "#4a2530",
+  "valid": "#2a2e35"
+ }
+}

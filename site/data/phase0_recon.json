@@ -1,0 +1,195 @@
+{
+  "source": {
+    "hf_repo": "code-search-net/code_search_net",
+    "revision": "bd0cf261e357a3eb5c8fba490d23ec1a1cd59555",
+    "files": {
+      "train": "python/train-00000-of-00001.parquet",
+      "validation": "python/validation-00000-of-00001.parquet",
+      "test": "python/test-00000-of-00001.parquet"
+    }
+  },
+  "seed": 0,
+  "fields": {
+    "repository_name": "str",
+    "func_path_in_repository": "str",
+    "func_name": "str",
+    "whole_func_string": "str",
+    "language": "str",
+    "func_code_string": "str",
+    "func_code_tokens": "object",
+    "func_documentation_string": "str",
+    "func_documentation_tokens": "object",
+    "split_name": "str",
+    "func_code_url": "str"
+  },
+  "example_row": {
+    "repository_name": "mjirik/imcut",
+    "func_path_in_repository": "imcut/pycut.py",
+    "func_name": "ImageGraphCut.__msgc_step3_discontinuity_localization",
+    "whole_func_string": "def __msgc_step3_discontinuity_localization(self):\n        \"\"\"\n        Estimate discontinuity in basis of low resolution image segmentation.\n        :return: discontinuity in low resolution\n        \"\"",
+    "language": "python",
+    "func_code_string": "def __msgc_step3_discontinuity_localization(self):\n        \"\"\"\n        Estimate discontinuity in basis of low resolution image segmentation.\n        :return: discontinuity in low resolution\n        \"\"",
+    "func_code_tokens": "['def' '__msgc_step3_discontinuity_localization' '(' 'self' ')' ':'\n 'import' 'scipy' 'start' '=' 'self' '.' '_start_time' 'seg' '=' '1' '-'\n 'self' '.' 'segmentation' '.' 'astype' '(' 'np' '.' 'int8'",
+    "func_documentation_string": "Estimate discontinuity in basis of low resolution image segmentation.\n        :return: discontinuity in low resolution",
+    "func_documentation_tokens": "['Estimate' 'discontinuity' 'in' 'basis' 'of' 'low' 'resolution' 'image'\n 'segmentation' '.' ':' 'return' ':' 'discontinuity' 'in' 'low'\n 'resolution']",
+    "split_name": "train",
+    "func_code_url": "https://github.com/mjirik/imcut/blob/1b38e7cd18a7a38fe683c1cabe1222fe5fa03aa3/imcut/pycut.py#L323-L372"
+  },
+  "splits": {
+    "train": {
+      "n_functions": 412178,
+      "n_repos": 12231,
+      "functions_per_repo": {
+        "50": 10.0,
+        "90": 70.0,
+        "99": 361.40000000000146,
+        "max": 11211
+      },
+      "top5_repos": {
+        "saltstack/salt": 11211,
+        "mitsei/dlkit": 2551,
+        "materialsproject/pymatgen": 2211,
+        "brocade/pynos": 1921,
+        "google/grr": 1903
+      },
+      "empty": 0,
+      "exact_duplicates_within": 0,
+      "tokenize_fail": 161,
+      "ast_parse_fail": 4011,
+      "tokens_all": {
+        "50": 91.0,
+        "75": 165.0,
+        "90": 293.0,
+        "95": 420.0,
+        "99": 868.0,
+        "99.9": 2172.0,
+        "mean": 145.90051866791904,
+        "max": 28648
+      },
+      "tokens_excl_comment_nl": {
+        "50": 87.0,
+        "75": 157.0,
+        "90": 276.0,
+        "95": 395.0,
+        "99": 815.0,
+        "99.9": 2054.984000000055,
+        "mean": 138.81667261302326
+      },
+      "total_tokens_all": 60113494,
+      "split_name_values": [
+        "train"
+      ],
+      "language_values": [
+        "python"
+      ]
+    },
+    "validation": {
+      "n_functions": 23107,
+      "n_repos": 679,
+      "functions_per_repo": {
+        "50": 10.0,
+        "90": 80.0,
+        "99": 411.7400000000018,
+        "max": 958
+      },
+      "top5_repos": {
+        "numenta/nupic": 958,
+        "apache/incubator-heron": 585,
+        "trailofbits/manticore": 540,
+        "CalebBell/thermo": 504,
+        "annoviko/pyclustering": 496
+      },
+      "empty": 0,
+      "exact_duplicates_within": 0,
+      "tokenize_fail": 7,
+      "ast_parse_fail": 290,
+      "tokens_all": {
+        "50": 91.0,
+        "75": 168.0,
+        "90": 310.0,
+        "95": 454.0499999999993,
+        "99": 976.0,
+        "99.9": 2436.179000000131,
+        "mean": 152.76922077922077,
+        "max": 8584
+      },
+      "tokens_excl_comment_nl": {
+        "50": 88.0,
+        "75": 159.0,
+        "90": 291.1000000000022,
+        "95": 423.0499999999993,
+        "99": 899.0099999999984,
+        "99.9": 2308.426000000043,
+        "mean": 144.73510822510823
+      },
+      "total_tokens_all": 3528969,
+      "split_name_values": [
+        "valid"
+      ],
+      "language_values": [
+        "python"
+      ]
+    },
+    "test": {
+      "n_functions": 22176,
+      "n_repos": 680,
+      "functions_per_repo": {
+        "50": 9.0,
+        "90": 68.10000000000002,
+        "99": 472.3100000000004,
+        "max": 1563
+      },
+      "top5_repos": {
+        "cloud9ers/gurumate": 1563,
+        "apache/airflow": 797,
+        "Qiskit/qiskit-terra": 721,
+        "tensorflow/probability": 714,
+        "Clinical-Genomics/scout": 498
+      },
+      "empty": 0,
+      "exact_duplicates_within": 0,
+      "tokenize_fail": 3,
+      "ast_parse_fail": 228,
+      "tokens_all": {
+        "50": 91.0,
+        "75": 166.0,
+        "90": 291.0,
+        "95": 410.0,
+        "99": 806.2799999999988,
+        "99.9": 1682.2280000000683,
+        "mean": 143.07468542822352,
+        "max": 4448
+      },
+      "tokens_excl_comment_nl": {
+        "50": 88.0,
+        "75": 157.0,
+        "90": 272.0,
+        "95": 383.0,
+        "99": 763.0,
+        "99.9": 1590.1840000000375,
+        "mean": 135.37843322960356
+      },
+      "total_tokens_all": 3172395,
+      "split_name_values": [
+        "test"
+      ],
+      "language_values": [
+        "python"
+      ]
+    }
+  },
+  "repo_overlap": {
+    "train&validation": 0,
+    "train&test": 0,
+    "validation&test": 0
+  },
+  "code_overlap_exact": {
+    "train&validation": 0,
+    "train&test": 0,
+    "validation&test": 0
+  },
+  "n_repos_total": 13590,
+  "n_functions_total": 457461,
+  "runtime_s": 36.8,
+  "peak_rss_gb_main": 3.74
+}

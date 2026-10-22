@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Syntax learning and generalization in MLP-based Python code generation</title>
+<meta name="description" content="Fixed-context MLP language models versus Kneser-Ney n-grams on Python code: how much code a model can see, how often its code parses, and how it does on repositories it never saw.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<nav class="topbar" aria-label="Sections">
+<span class="brand">MLP vs n-gram on Python code</span>
+<a href="#predict" data-spy="predict">How it works</a><a href="#context" data-spy="context">Context</a><a href="#validity" data-spy="validity">Valid code</a><a href="#brackets" data-spy="brackets">Why it breaks</a><a href="#repos" data-spy="repos">New repositories</a><a href="#playground" data-spy="playground">Try it</a><a href="#method" data-spy="method">Method</a><a href="https://github.com/DeepBuha06/ES335">Code</a>
+</nav>
+
+<noscript><p class="note">The visuals on this page are drawn with JavaScript.</p></noscript>
+
+<header class="intro wide">
+<div class="intro-text">
+<p class="byline">ES 335 individual project &middot; Buha Deep Maheshbhai (24110082)</p>
+<h1>Syntax learning and generalization in MLP-based Python code generation</h1>
+<!-- DRAFT: Deep to rewrite -->
+<p class="lede">I trained small neural networks to continue Python code, each one able to see a fixed number of previous tokens, and compared them with a classic n-gram model. The question is how much the amount of visible code matters for predicting the next token, for writing code that Python accepts, and for code from projects the models never saw.</p>
+</div>
+<div class="tiles" id="tiles" aria-label="Headline comparison"></div>
+</header>
+
+<section id="predict" class="scene">
+<div class="scene-grid wide">
+<div class="scene-text">
+<p class="kicker">1 &middot; How the models work</p>
+<h2>Writing code one token at a time</h2>
+<!-- DRAFT: Deep to rewrite -->
+<p>Both models read code as a list of tokens (names, symbols, line breaks) and guess the next one. They differ in how much they can see. The n-gram looks up how often the last few tokens were followed by each token in the training code. The MLP turns each visible token into a vector and passes them through a small neural network.</p>
+<!-- DRAFT: Deep to rewrite -->
+<p>Press play. The shaded band is everything the MLP can see; the underline is what the order-<span data-v="perplexity.model_info.ngram5.order" data-f="int"></span> n-gram can see. The bars are each model's five most likely guesses, and the outlined bar is the token that actually comes next. Switch the context length to watch the guesses change.</p>
+<p class="note">Functions picked at random from the validation split. The code shown is the real function: at every step both models are given the real code so far and only guess the next token. Perplexity measures how much probability they give to the real one.</p>
+</div>
+<div class="scene-vis panel" id="pv"></div>
+</div>
+</section>
+
+<section id="context" class="scene alt">
+<div class="scene-grid wide">
+<div class="scene-text">
+<p class="kicker">2 &middot; Result</p>
+<h2>More visible code, better guesses</h2>
+<!-- DRAFT: Deep to rewrite -->
+<p>Perplexity is roughly the number of tokens a model is still choosing between, so lower is better. On repositories the models never saw, the MLP goes from <span data-v="perplexity.summary.mlp3.test_ood.ppl_mean" data-f="f2"></span> with <span data-v="perplexity.model_info.mlp3.context" data-f="int"></span> tokens of context to <span data-v="perplexity.summary.mlp20.test_ood.ppl_mean" data-f="f2"></span> with <span data-v="perplexity.model_info.mlp20.context" data-f="int"></span>. The n-gram stops improving at <span data-v="perplexity.summary.ngram5.test_ood.ppl_mean" data-f="f2"></span>, because longer exact token sequences are rarely seen twice.</p>
+<!-- DRAFT: Deep to rewrite -->
+<p>With the same <span data-v="perplexity.model_info.mlp3.context" data-f="int"></span> tokens of context the MLP is also better: <span data-v="perplexity.summary.mlp3.test_ood.ppl_mean" data-f="f2"></span> against <span data-v="perplexity.summary.ngram4.test_ood.ppl_mean" data-f="f2"></span> for the order-<span data-v="perplexity.model_info.ngram4.order" data-f="int"></span> n-gram.</p>
+<details class="more"><summary>All numbers</summary><div class="tablewrap" id="tbl-ppl"></div></details>
+</div>
+<figure class="scene-vis panel" id="fig-ppl">
+<!-- DRAFT: Deep to rewrite -->
+<figcaption class="vis-cap">Perplexity by how many previous tokens each model sees. Error bars: spread over three training seeds.</figcaption></figure>
+</div>
+</section>
+
+<section id="validity" class="scene">
+<div class="scene-grid wide">
+<div class="scene-text">
+<p class="kicker">3 &middot; Result</p>
+<h2>How often the written code is valid Python</h2>
+<!-- DRAFT: Deep to rewrite -->
+<p>For <span data-v="validity.config.prompts_per_set" data-f="int"></span> test functions from seen and <span data-v="validity.config.prompts_per_set" data-f="int"></span> from unseen repositories, each model got the first line of the function and a few tokens, and wrote the rest. I then asked Python's own parser whether the result is valid code. Each square is one in a hundred finished functions.</p>
+<!-- DRAFT: Deep to rewrite -->
+<p>Context matters even more here than for perplexity. At temperature <span data-v="validity.config.temperatures.0" data-f="f1"></span> the context-<span data-v="perplexity.model_info.mlp20.context" data-f="int"></span> MLP writes valid code <span data-v="validity_by_model.mlp20.t10.all.rate" data-f="pct0"></span> of the time and the best n-gram <span data-v="validity_by_model.ngram5.t10.all.rate" data-f="pct0"></span>. A lower temperature makes the models pick likely tokens more often, and both get better.</p>
+<details class="more"><summary>All numbers</summary><div class="tablewrap" id="tbl-validity"></div></details>
+</div>
+<figure class="scene-vis panel" id="fig-waffle">
+<!-- DRAFT: Deep to rewrite -->
+<figcaption class="vis-cap">Valid functions out of every hundred finished ones. Samples that hit the length limit are left out and counted in the table.</figcaption></figure>
+</div>
+</section>
+
+<section id="brackets" class="scene alt">
+<div class="scene-grid wide">
+<div class="scene-text">
+<p class="kicker">4 &middot; Failure analysis</p>
+<h2>Why the code breaks: brackets</h2>
+<!-- DRAFT: Deep to rewrite -->
+<p>Most invalid samples fail on a bracket: one that is never closed, or closed with the wrong kind. To close a bracket correctly a model has to know it was opened, and with a short window the opening bracket may already be out of view.</p>
+<!-- DRAFT: Deep to rewrite -->
+<p>The examples are real samples from the test run that failed on a bracket. The arc joins the opening bracket to the one the parser rejected; the shaded band is what the model could see when it wrote that bracket.</p>
+<div id="fail-bars"></div>
+</div>
+<figure class="scene-vis panel" id="fig-bracket">
+<!-- DRAFT: Deep to rewrite -->
+<figcaption class="vis-cap" id="bracket-cap"></figcaption></figure>
+</div>
+</section>
+
+<section id="repos" class="scene">
+<div class="scene-grid wide">
+<div class="scene-text">
+<p class="kicker">5 &middot; Generalization</p>
+<h2>Code from repositories the models never saw</h2>
+<!-- DRAFT: Deep to rewrite -->
+<p>I held out whole repositories. On them, perplexity rises for every model except the bigram, but much more for long n-grams: <span data-v="perplexity.gaps.ngram5.gap" data-f="spct1"></span> for the order-<span data-v="perplexity.model_info.ngram5.order" data-f="int"></span> n-gram against <span data-v="perplexity.gaps.mlp20.gap" data-f="spct1"></span> for the context-<span data-v="perplexity.model_info.mlp20.context" data-f="int"></span> MLP. Long n-grams rely on exact token sequences that repeat inside one project.</p>
+<!-- DRAFT: Deep to rewrite -->
+<p>Syntax carries over almost unchanged: the context-<span data-v="perplexity.model_info.mlp20.context" data-f="int"></span> MLP writes valid code for <span data-v="validity_by_model.mlp20.t10.test_id.rate" data-f="pct1"></span> of prompts from seen repositories and <span data-v="validity_by_model.mlp20.t10.test_ood.rate" data-f="pct1"></span> from unseen ones.</p>
+</div>
+<figure class="scene-vis panel" id="fig-slope">
+<!-- DRAFT: Deep to rewrite -->
+<figcaption class="vis-cap">Perplexity on functions from repositories seen in training (left) and never seen (right). The percentage is the increase.</figcaption></figure>
+</div>
+</section>
+
+<section id="playground" class="scene alt">
+<div class="wide">
+<p class="kicker">6 &middot; Try it</p>
+<h2>Compare the two models on a test function</h2>
+<!-- DRAFT: Deep to rewrite -->
+<p class="narrow">Pick a function. Both models continue it from the same start; the colour of each token shows how sure the model was, and a red wavy line marks where Python stops accepting the code. You can also edit the start and let the MLP continue it live in your browser.</p>
+<div class="pg panel" id="x-root"></div>
+</div>
+</section>
+
+<section id="method" class="scene">
+<div class="wide">
+<p class="kicker">7 &middot; Method</p>
+<h2>How the experiment was built</h2>
+<div class="pipeline" id="pipeline"></div>
+<div class="method-grid">
+<div>
+<h3>The data</h3>
+<!-- DRAFT: Deep to rewrite -->
+<p>CodeSearchNet's Python functions: <span data-v="phase0_recon.n_functions_total" data-f="int"></span> functions from <span data-v="phase0_recon.n_repos_total" data-f="int"></span> repositories. I removed code that current Python cannot parse (<span data-v="phase1_report.filter.ast_fail" data-f="int"></span> functions), very long functions and near-duplicates, kept at most <span data-v="phase1_report.sampling.max_per_repo" data-f="int"></span> functions per repository, and split by repository so that test repositories never appear in training. Comments, docstrings and literal values are removed; the vocabulary keeps the <span data-v="phase1_report.vocab.size_incl_specials" data-f="int"></span> most useful tokens and maps the rest to one unknown-name token.</p>
+<div class="tablewrap" id="tbl-splits"></div>
+</div>
+<div>
+<h3>The models</h3>
+<!-- DRAFT: Deep to rewrite -->
+<p>The n-gram is interpolated Kneser&ndash;Ney smoothing with three discounts per order, which lowered the order-<span data-v="perplexity.model_info.ngram5.order" data-f="int"></span> validation perplexity from <span data-v="phase2_ngram.ablation.val_ppl.5" data-f="f2"></span> to <span data-v="phase2_ngram.models.3.val_ppl" data-f="f2"></span>. The MLP has one hidden layer of <span data-v="perplexity.model_info.mlp20.hidden" data-f="int"></span> units on top of <span data-v="perplexity.model_info.mlp20.emb_dim" data-f="int"></span>-dimensional token vectors; only the input layer grows with the context, so longer contexts also mean more parameters. Learning rate, hidden size and dropout (<span data-v="perplexity.model_info.mlp20.dropout" data-f="f1"></span> for every context) were chosen on the validation split, and each MLP was trained with three seeds.</p>
+<div id="mlp-diagram"></div>
+<div class="tablewrap" id="tbl-models"></div>
+</div>
+</div>
+<details class="more wide-details"><summary>Training curves</summary><figure class="panel" id="fig-curves">
+<!-- DRAFT: Deep to rewrite -->
+<figcaption class="vis-cap">Validation loss per epoch; training stops when it no longer improves or after twelve epochs.</figcaption></figure></details>
+<h3>Limitations</h3>
+<!-- DRAFT: Deep to rewrite -->
+<p class="narrow">Valid syntax is not working code, and nothing here was executed. Rare names are one unknown token and literals are removed, which makes the task easier than real code. Longer-context MLPs also have more parameters, so context and model size are not fully separated. Everything on this page is read from the files in <code>site/data</code>; the repository README lists the commands that produce them.</p>
+</div>
+</section>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

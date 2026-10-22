@@ -1,0 +1,28 @@
+# Colours. `print` = light palette for the static PNG figures in results/figures (CLAUDE.md section 5).
+# `site` = dark palette for the website (Deep asked for a bolder, less washed-out look on 2026-10-22).
+# Both validated with the dataviz ordinal check (monotone lightness, adjacent dL >= 0.06, end clears the surface).
+print:
+  background: "#ffffff"
+  ink: "#111111"
+  ink_secondary: "#555555"
+  hairline: "#e5e5e5"
+  invalid: "#b04a4a"
+  ngram: {2: "#aaaaaa", 3: "#878787", 4: "#636363", 5: "#3d3d3d"}
+  mlp: {3: "#7fb2d9", 5: "#4a8fca", 10: "#1f64a8", 20: "#08306b"}
+site:
+  background: "#0c0d0f"
+  panel: "#131519"
+  band: "#0f1114"            # alternate full-width sections
+  ink: "#e6e8eb"
+  ink_secondary: "#9aa0a8"
+  hairline: "#24272d"
+  rule: "#3a3f47"
+  raised: "#1b1e24"          # tooltips
+  chip: "#23272e"            # prompt tokens
+  active: "#1a1d22"          # editor active line
+  muted: "#6c727b"           # disabled text, editor gutter
+  body: "#cfd3d8"            # paragraph text
+  invalid: "#ff6b7a"
+  ngram: {2: "#5d636d", 3: "#7d8490", 4: "#a0a7b3", 5: "#c7cdd8"}   # order 2 -> 5, dim -> bright
+  mlp: {3: "#2f6aa3", 5: "#3f8fd6", 10: "#62b4f5", 20: "#a8dcff"}  # context 3 -> 20, dim -> bright blue
+  fail: {"unbalanced brackets": "#ff6b7a", "indentation": "#c2495a", "incomplete statement": "#7f3441", "other": "#4a2530", "valid": "#2a2e35"}
