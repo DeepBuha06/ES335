@@ -1,0 +1,42 @@
+{
+ "seed": 0,
+ "split": "val",
+ "models": {
+  "mlp3": {
+   "context": 3,
+   "fp32_mb": 26.44,
+   "int8_mb": 10.49,
+   "val_ppl_torch": 9.116194931362797,
+   "val_ppl_onnx_fp32": 9.116194938495308,
+   "val_ppl_onnx_int8": 9.131659515821058,
+   "top1_agreement_int8_vs_fp32": 0.9824295943107825
+  },
+  "mlp5": {
+   "context": 5,
+   "fp32_mb": 26.96,
+   "int8_mb": 10.62,
+   "val_ppl_torch": 7.705285432576251,
+   "val_ppl_onnx_fp32": 7.7052855392781,
+   "val_ppl_onnx_int8": 7.712348887414961,
+   "top1_agreement_int8_vs_fp32": 0.9826355608533827
+  },
+  "mlp10": {
+   "context": 10,
+   "fp32_mb": 28.27,
+   "int8_mb": 10.94,
+   "val_ppl_torch": 6.6448886066039945,
+   "val_ppl_onnx_fp32": 6.644888702933906,
+   "val_ppl_onnx_int8": 6.656655380623131,
+   "top1_agreement_int8_vs_fp32": 0.98001151466498
+  },
+  "mlp20": {
+   "context": 20,
+   "fp32_mb": 30.9,
+   "int8_mb": 11.6,
+   "val_ppl_torch": 5.966068809684929,
+   "val_ppl_onnx_fp32": 5.966068855940047,
+   "val_ppl_onnx_int8": 5.981098194524633,
+   "top1_agreement_int8_vs_fp32": 0.9804802101831804
+  }
+ }
+}

@@ -1,0 +1,7 @@
+traces:                  # "watch it predict" examples for the website (validation split only)
+  seed: 0
+  n_functions: 6
+  min_tokens: 40
+  max_tokens: 110
+  max_unk: 3
+  top_k: 5
