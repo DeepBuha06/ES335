@@ -1,0 +1,26 @@
+seed: 0
+contexts: [3, 5, 10, 20]
+seeds: [0, 1, 2]
+model:                  # emb_dim, hidden, lr fixed across context lengths (lr/hidden from the search below)
+  emb_dim: 128
+  hidden: 512
+  dropout: 0.1
+  lr: 0.002
+  weight_decay: 0.01
+  batch_size: 4096
+  max_epochs: 12
+  patience: 2
+  warmup_steps: 300
+search:                 # val-only, run at context 10, seed 0, short budget
+  context: 10
+  max_epochs: 4
+  tolerance: 0.002      # nats; within this of the best val loss, prefer the smaller hidden size
+  grid:
+    lr: [0.001, 0.003]
+    hidden: [512, 1024]
+    dropout: [0.0, 0.2]
+dropout_grid: [0.1, 0.2, 0.35, 0.5]   # chosen per context length on val (seed 0, full training)
+dropout_step: 0.15                    # if the largest value wins, also try +0.15 (repeat while it keeps winning)
+dropout_max: 0.8
+results_dir: results/phase3
+ckpt_dir: data/checkpoints
