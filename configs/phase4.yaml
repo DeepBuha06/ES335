@@ -1,0 +1,19 @@
+seed: 0
+splits: [val, test_id, test_ood]
+ngram_orders: [2, 3, 4, 5]
+mlp_contexts: [3, 5, 10, 20]
+mlp_seeds: [0, 1, 2]
+bootstrap: {n_boot_ppl: 1000, n_boot_rate: 2000}
+sampling:
+  prompt_body_tokens: 5       # k: first k body tokens after the signature line are part of the prompt
+  prompts_per_set: 1000       # per test set (ID, OOD)
+  max_new_tokens: 256
+  temperatures: [1.0, 0.5]
+  reps: [0, 1, 2]             # n-gram: sampling seed; MLP: training seed (same sampling seed)
+  sample_seed_base: 1000
+examples_per_category: 3
+explorer: {prompts_per_set: 8, seed: 2024, top_k: 5, max_original_tokens: 400}
+ckpt_dir: data/checkpoints
+ngram_dir: data/processed
+out_dir: results/phase4
+site_dir: site/data

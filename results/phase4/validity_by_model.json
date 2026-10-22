@@ -1,0 +1,1106 @@
+{
+ "ngram2": {
+  "t10": {
+   "test_id": {
+    "model": "ngram2",
+    "T": 1.0,
+    "set": "test_id",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 2851,
+    "truncated": 149,
+    "valid": 148,
+    "rate": 0.05191160996141705,
+    "ci": [
+     0.04303633647667938,
+     0.06134032744982826
+    ],
+    "failures": {
+     "unbalanced brackets": 1953,
+     "indentation": 273,
+     "incomplete statement": 155,
+     "other": 322
+    }
+   },
+   "test_ood": {
+    "model": "ngram2",
+    "T": 1.0,
+    "set": "test_ood",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 2863,
+    "truncated": 137,
+    "valid": 129,
+    "rate": 0.04505763185469787,
+    "ci": [
+     0.037550304592143695,
+     0.05350952735482187
+    ],
+    "failures": {
+     "unbalanced brackets": 1992,
+     "indentation": 250,
+     "incomplete statement": 151,
+     "other": 341
+    }
+   },
+   "all": {
+    "model": "ngram2",
+    "T": 1.0,
+    "set": "all",
+    "reps": 3,
+    "n_prompts": 2000,
+    "completions": 6000,
+    "natural": 5714,
+    "truncated": 286,
+    "valid": 277,
+    "rate": 0.04847742387119356,
+    "ci": [
+     0.04243696795080946,
+     0.054604712896371574
+    ],
+    "failures": {
+     "unbalanced brackets": 3945,
+     "indentation": 523,
+     "incomplete statement": 306,
+     "other": 663
+    }
+   }
+  },
+  "t05": {
+   "test_id": {
+    "model": "ngram2",
+    "T": 0.5,
+    "set": "test_id",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 2999,
+    "truncated": 1,
+    "valid": 272,
+    "rate": 0.0906968989663221,
+    "ci": [
+     0.07935978659553185,
+     0.1024415415415415
+    ],
+    "failures": {
+     "unbalanced brackets": 1503,
+     "indentation": 539,
+     "incomplete statement": 279,
+     "other": 406
+    }
+   },
+   "test_ood": {
+    "model": "ngram2",
+    "T": 0.5,
+    "set": "test_ood",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 2999,
+    "truncated": 1,
+    "valid": 240,
+    "rate": 0.0800266755585195,
+    "ci": [
+     0.069,
+     0.09103034344781594
+    ],
+    "failures": {
+     "unbalanced brackets": 1538,
+     "indentation": 483,
+     "incomplete statement": 304,
+     "other": 434
+    }
+   },
+   "all": {
+    "model": "ngram2",
+    "T": 0.5,
+    "set": "all",
+    "reps": 3,
+    "n_prompts": 2000,
+    "completions": 6000,
+    "natural": 5998,
+    "truncated": 2,
+    "valid": 512,
+    "rate": 0.0853617872624208,
+    "ci": [
+     0.0776757689858391,
+     0.09350077942647549
+    ],
+    "failures": {
+     "unbalanced brackets": 3041,
+     "indentation": 1022,
+     "incomplete statement": 583,
+     "other": 840
+    }
+   }
+  }
+ },
+ "ngram3": {
+  "t10": {
+   "test_id": {
+    "model": "ngram3",
+    "T": 1.0,
+    "set": "test_id",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 2864,
+    "truncated": 136,
+    "valid": 380,
+    "rate": 0.13268156424581007,
+    "ci": [
+     0.11852546348238392,
+     0.14705907857419764
+    ],
+    "failures": {
+     "unbalanced brackets": 1853,
+     "indentation": 1,
+     "incomplete statement": 158,
+     "other": 472
+    }
+   },
+   "test_ood": {
+    "model": "ngram3",
+    "T": 1.0,
+    "set": "test_ood",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 2856,
+    "truncated": 144,
+    "valid": 319,
+    "rate": 0.11169467787114847,
+    "ci": [
+     0.09873776837536974,
+     0.12399996981496572
+    ],
+    "failures": {
+     "unbalanced brackets": 1863,
+     "indentation": 2,
+     "incomplete statement": 160,
+     "other": 512
+    }
+   },
+   "all": {
+    "model": "ngram3",
+    "T": 1.0,
+    "set": "all",
+    "reps": 3,
+    "n_prompts": 2000,
+    "completions": 6000,
+    "natural": 5720,
+    "truncated": 280,
+    "valid": 699,
+    "rate": 0.1222027972027972,
+    "ci": [
+     0.11302449030284165,
+     0.13188768888673758
+    ],
+    "failures": {
+     "unbalanced brackets": 3716,
+     "indentation": 3,
+     "incomplete statement": 318,
+     "other": 984
+    }
+   }
+  },
+  "t05": {
+   "test_id": {
+    "model": "ngram3",
+    "T": 0.5,
+    "set": "test_id",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 3000,
+    "truncated": 0,
+    "valid": 1030,
+    "rate": 0.3433333333333333,
+    "ci": [
+     0.321,
+     0.36500833333333327
+    ],
+    "failures": {
+     "unbalanced brackets": 994,
+     "indentation": 5,
+     "incomplete statement": 381,
+     "other": 590
+    }
+   },
+   "test_ood": {
+    "model": "ngram3",
+    "T": 0.5,
+    "set": "test_ood",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 3000,
+    "truncated": 0,
+    "valid": 911,
+    "rate": 0.30366666666666664,
+    "ci": [
+     0.2836666666666667,
+     0.324
+    ],
+    "failures": {
+     "unbalanced brackets": 1045,
+     "indentation": 4,
+     "incomplete statement": 401,
+     "other": 639
+    }
+   },
+   "all": {
+    "model": "ngram3",
+    "T": 0.5,
+    "set": "all",
+    "reps": 3,
+    "n_prompts": 2000,
+    "completions": 6000,
+    "natural": 6000,
+    "truncated": 0,
+    "valid": 1941,
+    "rate": 0.3235,
+    "ci": [
+     0.30916666666666665,
+     0.3385
+    ],
+    "failures": {
+     "unbalanced brackets": 2039,
+     "indentation": 9,
+     "incomplete statement": 782,
+     "other": 1229
+    }
+   }
+  }
+ },
+ "ngram4": {
+  "t10": {
+   "test_id": {
+    "model": "ngram4",
+    "T": 1.0,
+    "set": "test_id",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 2831,
+    "truncated": 169,
+    "valid": 349,
+    "rate": 0.12327799364182268,
+    "ci": [
+     0.11071958979210486,
+     0.1362228394562091
+    ],
+    "failures": {
+     "unbalanced brackets": 1795,
+     "indentation": 0,
+     "incomplete statement": 154,
+     "other": 533
+    }
+   },
+   "test_ood": {
+    "model": "ngram4",
+    "T": 1.0,
+    "set": "test_ood",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 2849,
+    "truncated": 151,
+    "valid": 357,
+    "rate": 0.12530712530712532,
+    "ci": [
+     0.11169647653581981,
+     0.13964245243016973
+    ],
+    "failures": {
+     "unbalanced brackets": 1845,
+     "indentation": 3,
+     "incomplete statement": 173,
+     "other": 471
+    }
+   },
+   "all": {
+    "model": "ngram4",
+    "T": 1.0,
+    "set": "all",
+    "reps": 3,
+    "n_prompts": 2000,
+    "completions": 6000,
+    "natural": 5680,
+    "truncated": 320,
+    "valid": 706,
+    "rate": 0.12429577464788732,
+    "ci": [
+     0.11496428281447177,
+     0.13403767392654153
+    ],
+    "failures": {
+     "unbalanced brackets": 3640,
+     "indentation": 3,
+     "incomplete statement": 327,
+     "other": 1004
+    }
+   }
+  },
+  "t05": {
+   "test_id": {
+    "model": "ngram4",
+    "T": 0.5,
+    "set": "test_id",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 3000,
+    "truncated": 0,
+    "valid": 1065,
+    "rate": 0.355,
+    "ci": [
+     0.33366666666666667,
+     0.37633333333333335
+    ],
+    "failures": {
+     "unbalanced brackets": 1014,
+     "indentation": 1,
+     "incomplete statement": 447,
+     "other": 473
+    }
+   },
+   "test_ood": {
+    "model": "ngram4",
+    "T": 0.5,
+    "set": "test_ood",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 3000,
+    "truncated": 0,
+    "valid": 970,
+    "rate": 0.3233333333333333,
+    "ci": [
+     0.30266666666666664,
+     0.3436666666666667
+    ],
+    "failures": {
+     "unbalanced brackets": 1071,
+     "indentation": 2,
+     "incomplete statement": 465,
+     "other": 492
+    }
+   },
+   "all": {
+    "model": "ngram4",
+    "T": 0.5,
+    "set": "all",
+    "reps": 3,
+    "n_prompts": 2000,
+    "completions": 6000,
+    "natural": 6000,
+    "truncated": 0,
+    "valid": 2035,
+    "rate": 0.33916666666666667,
+    "ci": [
+     0.3239916666666667,
+     0.3536666666666667
+    ],
+    "failures": {
+     "unbalanced brackets": 2085,
+     "indentation": 3,
+     "incomplete statement": 912,
+     "other": 965
+    }
+   }
+  }
+ },
+ "ngram5": {
+  "t10": {
+   "test_id": {
+    "model": "ngram5",
+    "T": 1.0,
+    "set": "test_id",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 2834,
+    "truncated": 166,
+    "valid": 473,
+    "rate": 0.16690190543401554,
+    "ci": [
+     0.15213286219169264,
+     0.18069817156451407
+    ],
+    "failures": {
+     "unbalanced brackets": 1713,
+     "indentation": 3,
+     "incomplete statement": 165,
+     "other": 480
+    }
+   },
+   "test_ood": {
+    "model": "ngram5",
+    "T": 1.0,
+    "set": "test_ood",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 2833,
+    "truncated": 167,
+    "valid": 447,
+    "rate": 0.15778326861983763,
+    "ci": [
+     0.14320948408656956,
+     0.17316542243482883
+    ],
+    "failures": {
+     "unbalanced brackets": 1699,
+     "indentation": 3,
+     "incomplete statement": 171,
+     "other": 513
+    }
+   },
+   "all": {
+    "model": "ngram5",
+    "T": 1.0,
+    "set": "all",
+    "reps": 3,
+    "n_prompts": 2000,
+    "completions": 6000,
+    "natural": 5667,
+    "truncated": 333,
+    "valid": 920,
+    "rate": 0.16234339156520206,
+    "ci": [
+     0.15216520174569825,
+     0.1729990229910608
+    ],
+    "failures": {
+     "unbalanced brackets": 3412,
+     "indentation": 6,
+     "incomplete statement": 336,
+     "other": 993
+    }
+   }
+  },
+  "t05": {
+   "test_id": {
+    "model": "ngram5",
+    "T": 0.5,
+    "set": "test_id",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 3000,
+    "truncated": 0,
+    "valid": 1482,
+    "rate": 0.494,
+    "ci": [
+     0.4723333333333333,
+     0.5160083333333333
+    ],
+    "failures": {
+     "unbalanced brackets": 685,
+     "indentation": 0,
+     "incomplete statement": 377,
+     "other": 456
+    }
+   },
+   "test_ood": {
+    "model": "ngram5",
+    "T": 0.5,
+    "set": "test_ood",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 2999,
+    "truncated": 1,
+    "valid": 1416,
+    "rate": 0.47215738579526506,
+    "ci": [
+     0.45032041513837945,
+     0.4949967478318879
+    ],
+    "failures": {
+     "unbalanced brackets": 762,
+     "indentation": 4,
+     "incomplete statement": 375,
+     "other": 442
+    }
+   },
+   "all": {
+    "model": "ngram5",
+    "T": 0.5,
+    "set": "all",
+    "reps": 3,
+    "n_prompts": 2000,
+    "completions": 6000,
+    "natural": 5999,
+    "truncated": 1,
+    "valid": 2898,
+    "rate": 0.4830805134189031,
+    "ci": [
+     0.4675,
+     0.4982559530734282
+    ],
+    "failures": {
+     "unbalanced brackets": 1447,
+     "indentation": 4,
+     "incomplete statement": 752,
+     "other": 898
+    }
+   }
+  }
+ },
+ "mlp3": {
+  "t10": {
+   "test_id": {
+    "model": "mlp3",
+    "T": 1.0,
+    "set": "test_id",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 2903,
+    "truncated": 97,
+    "valid": 401,
+    "rate": 0.13813296589734758,
+    "ci": [
+     0.12456871873529236,
+     0.15193522156444025
+    ],
+    "failures": {
+     "unbalanced brackets": 1798,
+     "indentation": 0,
+     "incomplete statement": 194,
+     "other": 510
+    }
+   },
+   "test_ood": {
+    "model": "mlp3",
+    "T": 1.0,
+    "set": "test_ood",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 2887,
+    "truncated": 113,
+    "valid": 402,
+    "rate": 0.13924489089019743,
+    "ci": [
+     0.12555840679295469,
+     0.15352686331082163
+    ],
+    "failures": {
+     "unbalanced brackets": 1812,
+     "indentation": 2,
+     "incomplete statement": 205,
+     "other": 466
+    }
+   },
+   "all": {
+    "model": "mlp3",
+    "T": 1.0,
+    "set": "all",
+    "reps": 3,
+    "n_prompts": 2000,
+    "completions": 6000,
+    "natural": 5790,
+    "truncated": 210,
+    "valid": 803,
+    "rate": 0.1386873920552677,
+    "ci": [
+     0.12886919129114063,
+     0.1485001670928181
+    ],
+    "failures": {
+     "unbalanced brackets": 3610,
+     "indentation": 2,
+     "incomplete statement": 399,
+     "other": 976
+    }
+   }
+  },
+  "t05": {
+   "test_id": {
+    "model": "mlp3",
+    "T": 0.5,
+    "set": "test_id",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 3000,
+    "truncated": 0,
+    "valid": 1122,
+    "rate": 0.374,
+    "ci": [
+     0.353,
+     0.3963333333333333
+    ],
+    "failures": {
+     "unbalanced brackets": 984,
+     "indentation": 1,
+     "incomplete statement": 440,
+     "other": 453
+    }
+   },
+   "test_ood": {
+    "model": "mlp3",
+    "T": 0.5,
+    "set": "test_ood",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 3000,
+    "truncated": 0,
+    "valid": 1081,
+    "rate": 0.36033333333333334,
+    "ci": [
+     0.34,
+     0.38133333333333336
+    ],
+    "failures": {
+     "unbalanced brackets": 987,
+     "indentation": 5,
+     "incomplete statement": 459,
+     "other": 468
+    }
+   },
+   "all": {
+    "model": "mlp3",
+    "T": 0.5,
+    "set": "all",
+    "reps": 3,
+    "n_prompts": 2000,
+    "completions": 6000,
+    "natural": 6000,
+    "truncated": 0,
+    "valid": 2203,
+    "rate": 0.36716666666666664,
+    "ci": [
+     0.35149583333333334,
+     0.383
+    ],
+    "failures": {
+     "unbalanced brackets": 1971,
+     "indentation": 6,
+     "incomplete statement": 899,
+     "other": 921
+    }
+   }
+  }
+ },
+ "mlp5": {
+  "t10": {
+   "test_id": {
+    "model": "mlp5",
+    "T": 1.0,
+    "set": "test_id",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 2905,
+    "truncated": 95,
+    "valid": 694,
+    "rate": 0.23889845094664372,
+    "ci": [
+     0.223516500711607,
+     0.25677136982656673
+    ],
+    "failures": {
+     "unbalanced brackets": 1537,
+     "indentation": 1,
+     "incomplete statement": 204,
+     "other": 469
+    }
+   },
+   "test_ood": {
+    "model": "mlp5",
+    "T": 1.0,
+    "set": "test_ood",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 2904,
+    "truncated": 96,
+    "valid": 652,
+    "rate": 0.22451790633608815,
+    "ci": [
+     0.20781848613082074,
+     0.24173620009574506
+    ],
+    "failures": {
+     "unbalanced brackets": 1559,
+     "indentation": 1,
+     "incomplete statement": 207,
+     "other": 485
+    }
+   },
+   "all": {
+    "model": "mlp5",
+    "T": 1.0,
+    "set": "all",
+    "reps": 3,
+    "n_prompts": 2000,
+    "completions": 6000,
+    "natural": 5809,
+    "truncated": 191,
+    "valid": 1346,
+    "rate": 0.23170941642279222,
+    "ci": [
+     0.21948213440465766,
+     0.24340340874203747
+    ],
+    "failures": {
+     "unbalanced brackets": 3096,
+     "indentation": 2,
+     "incomplete statement": 411,
+     "other": 954
+    }
+   }
+  },
+  "t05": {
+   "test_id": {
+    "model": "mlp5",
+    "T": 0.5,
+    "set": "test_id",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 3000,
+    "truncated": 0,
+    "valid": 1637,
+    "rate": 0.5456666666666666,
+    "ci": [
+     0.5226666666666666,
+     0.5666666666666667
+    ],
+    "failures": {
+     "unbalanced brackets": 629,
+     "indentation": 1,
+     "incomplete statement": 337,
+     "other": 396
+    }
+   },
+   "test_ood": {
+    "model": "mlp5",
+    "T": 0.5,
+    "set": "test_ood",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 3000,
+    "truncated": 0,
+    "valid": 1676,
+    "rate": 0.5586666666666666,
+    "ci": [
+     0.5369916666666666,
+     0.5803416666666666
+    ],
+    "failures": {
+     "unbalanced brackets": 612,
+     "indentation": 0,
+     "incomplete statement": 318,
+     "other": 394
+    }
+   },
+   "all": {
+    "model": "mlp5",
+    "T": 0.5,
+    "set": "all",
+    "reps": 3,
+    "n_prompts": 2000,
+    "completions": 6000,
+    "natural": 6000,
+    "truncated": 0,
+    "valid": 3313,
+    "rate": 0.5521666666666667,
+    "ci": [
+     0.5371666666666667,
+     0.5671666666666667
+    ],
+    "failures": {
+     "unbalanced brackets": 1241,
+     "indentation": 1,
+     "incomplete statement": 655,
+     "other": 790
+    }
+   }
+  }
+ },
+ "mlp10": {
+  "t10": {
+   "test_id": {
+    "model": "mlp10",
+    "T": 1.0,
+    "set": "test_id",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 2920,
+    "truncated": 80,
+    "valid": 1370,
+    "rate": 0.4691780821917808,
+    "ci": [
+     0.4486652977412731,
+     0.4891011881591874
+    ],
+    "failures": {
+     "unbalanced brackets": 1015,
+     "indentation": 1,
+     "incomplete statement": 196,
+     "other": 338
+    }
+   },
+   "test_ood": {
+    "model": "mlp10",
+    "T": 1.0,
+    "set": "test_ood",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 2914,
+    "truncated": 86,
+    "valid": 1347,
+    "rate": 0.4622512010981469,
+    "ci": [
+     0.4429909495783984,
+     0.4815580060608772
+    ],
+    "failures": {
+     "unbalanced brackets": 980,
+     "indentation": 1,
+     "incomplete statement": 208,
+     "other": 378
+    }
+   },
+   "all": {
+    "model": "mlp10",
+    "T": 1.0,
+    "set": "all",
+    "reps": 3,
+    "n_prompts": 2000,
+    "completions": 6000,
+    "natural": 5834,
+    "truncated": 166,
+    "valid": 2717,
+    "rate": 0.4657182036338704,
+    "ci": [
+     0.45139772922759336,
+     0.47997972171969944
+    ],
+    "failures": {
+     "unbalanced brackets": 1995,
+     "indentation": 2,
+     "incomplete statement": 404,
+     "other": 716
+    }
+   }
+  },
+  "t05": {
+   "test_id": {
+    "model": "mlp10",
+    "T": 0.5,
+    "set": "test_id",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 2956,
+    "truncated": 44,
+    "valid": 2352,
+    "rate": 0.7956698240866035,
+    "ci": [
+     0.7784158194053323,
+     0.8126271374052164
+    ],
+    "failures": {
+     "unbalanced brackets": 189,
+     "indentation": 0,
+     "incomplete statement": 136,
+     "other": 279
+    }
+   },
+   "test_ood": {
+    "model": "mlp10",
+    "T": 0.5,
+    "set": "test_ood",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 2970,
+    "truncated": 30,
+    "valid": 2390,
+    "rate": 0.8047138047138047,
+    "ci": [
+     0.7877829654782117,
+     0.8219125184455801
+    ],
+    "failures": {
+     "unbalanced brackets": 177,
+     "indentation": 0,
+     "incomplete statement": 159,
+     "other": 244
+    }
+   },
+   "all": {
+    "model": "mlp10",
+    "T": 0.5,
+    "set": "all",
+    "reps": 3,
+    "n_prompts": 2000,
+    "completions": 6000,
+    "natural": 5926,
+    "truncated": 74,
+    "valid": 4742,
+    "rate": 0.8002024974687817,
+    "ci": [
+     0.786977804578466,
+     0.8123840053990214
+    ],
+    "failures": {
+     "unbalanced brackets": 366,
+     "indentation": 0,
+     "incomplete statement": 295,
+     "other": 523
+    }
+   }
+  }
+ },
+ "mlp20": {
+  "t10": {
+   "test_id": {
+    "model": "mlp20",
+    "T": 1.0,
+    "set": "test_id",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 2876,
+    "truncated": 124,
+    "valid": 1725,
+    "rate": 0.5997913769123783,
+    "ci": [
+     0.5803959128894708,
+     0.6198818491700337
+    ],
+    "failures": {
+     "unbalanced brackets": 615,
+     "indentation": 0,
+     "incomplete statement": 159,
+     "other": 377
+    }
+   },
+   "test_ood": {
+    "model": "mlp20",
+    "T": 1.0,
+    "set": "test_ood",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 2884,
+    "truncated": 116,
+    "valid": 1714,
+    "rate": 0.5943134535367545,
+    "ci": [
+     0.5766141344809016,
+     0.613755554988749
+    ],
+    "failures": {
+     "unbalanced brackets": 588,
+     "indentation": 3,
+     "incomplete statement": 210,
+     "other": 369
+    }
+   },
+   "all": {
+    "model": "mlp20",
+    "T": 1.0,
+    "set": "all",
+    "reps": 3,
+    "n_prompts": 2000,
+    "completions": 6000,
+    "natural": 5760,
+    "truncated": 240,
+    "valid": 3439,
+    "rate": 0.5970486111111111,
+    "ci": [
+     0.5832601128889477,
+     0.6109506223952322
+    ],
+    "failures": {
+     "unbalanced brackets": 1203,
+     "indentation": 3,
+     "incomplete statement": 369,
+     "other": 746
+    }
+   }
+  },
+  "t05": {
+   "test_id": {
+    "model": "mlp20",
+    "T": 0.5,
+    "set": "test_id",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 2786,
+    "truncated": 214,
+    "valid": 2594,
+    "rate": 0.9310839913854989,
+    "ci": [
+     0.9199508358484692,
+     0.9417793076668948
+    ],
+    "failures": {
+     "unbalanced brackets": 72,
+     "indentation": 1,
+     "incomplete statement": 34,
+     "other": 85
+    }
+   },
+   "test_ood": {
+    "model": "mlp20",
+    "T": 0.5,
+    "set": "test_ood",
+    "reps": 3,
+    "n_prompts": 1000,
+    "completions": 3000,
+    "natural": 2786,
+    "truncated": 214,
+    "valid": 2617,
+    "rate": 0.9393395549174444,
+    "ci": [
+     0.9289012726034895,
+     0.9491048541146748
+    ],
+    "failures": {
+     "unbalanced brackets": 45,
+     "indentation": 0,
+     "incomplete statement": 42,
+     "other": 82
+    }
+   },
+   "all": {
+    "model": "mlp20",
+    "T": 0.5,
+    "set": "all",
+    "reps": 3,
+    "n_prompts": 2000,
+    "completions": 6000,
+    "natural": 5572,
+    "truncated": 428,
+    "valid": 5211,
+    "rate": 0.9352117731514716,
+    "ci": [
+     0.9275466284074605,
+     0.9423229314129206
+    ],
+    "failures": {
+     "unbalanced brackets": 117,
+     "indentation": 1,
+     "incomplete statement": 76,
+     "other": 167
+    }
+   }
+  }
+ }
+}

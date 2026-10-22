@@ -113,24 +113,46 @@ def code_to_tokens(code, stats=None):
     return out
 
 
-def tokens_to_code(tokens, indent="    "):
-    """Rebuild parseable source; placeholders become "s" / 0 / unk_tok."""
-    lines, cur, level = [], [], 0
-    for t in tokens:
+def tokens_to_code_map(tokens, indent="    "):
+    """Rebuild parseable source (placeholders become "s" / 0 / unk_tok).
+
+    Returns (code, spans): spans[i] = (line, col), both 0-based, where token i starts in `code`;
+    layout tokens get the position where they occur (NEWLINE: end of its line, INDENT/DEDENT: start of next line).
+    """
+    lines, cur, cur_idx, level = [], [], [], 0
+    spans = [None] * len(tokens)
+
+    def flush(lvl):
+        col = len(indent) * lvl
+        for i, text in zip(cur_idx, cur):
+            spans[i] = (len(lines), col)
+            col += len(text) + 1
+        lines.append(indent * lvl + " ".join(cur))
+        return col - 1 if cur else len(indent) * lvl
+
+    for i, t in enumerate(tokens):
         if t == NEWLINE:
-            lines.append(indent * level + " ".join(cur))
-            cur = []
+            end_col = flush(level)
+            spans[i] = (len(lines) - 1, end_col)
+            cur, cur_idx = [], []
         elif t == INDENT:
             level += 1
+            spans[i] = (len(lines), 0)
         elif t == DEDENT:
             level = max(level - 1, 0)
+            spans[i] = (len(lines), 0)
         elif t in (BOS, EOS, PAD):
-            continue
+            spans[i] = (len(lines), 0)
         else:
             cur.append(SUBSTITUTE.get(t, UNK_NAME if t == UNK else t))
+            cur_idx.append(i)
     if cur:
-        lines.append(indent * level + " ".join(cur))
-    return "\n".join(lines) + "\n"
+        flush(level)
+    return "\n".join(lines) + "\n", spans
+
+
+def tokens_to_code(tokens, indent="    "):
+    return tokens_to_code_map(tokens, indent)[0]
 
 
 class Vocab:
