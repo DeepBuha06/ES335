@@ -11,22 +11,50 @@
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<nav class="topbar" aria-label="Sections">
-<span class="brand">MLP vs n-gram on Python code</span>
-<a href="#question" data-spy="question">Question</a><a href="#predict" data-spy="predict">How it works</a><a href="#context" data-spy="context">Context</a><a href="#validity" data-spy="validity">Valid code</a><a href="#brackets" data-spy="brackets">Why it breaks</a><a href="#repos" data-spy="repos">New repositories</a><a href="#playground" data-spy="playground">Try it</a><a href="#method" data-spy="method">Method</a><a href="#evaluation" data-spy="evaluation">Evaluation</a><a href="#conclusion" data-spy="conclusion">Conclusion</a><a href="#reproduce" data-spy="reproduce">Reproduce</a><a href="https://github.com/DeepBuha06/ES335">Code</a>
+<div class="shell">
+<nav class="rail" aria-label="Sections">
+<a class="brand" href="#question">
+<span class="mark" aria-hidden="true"><i></i><i></i></span>
+<span class="brand-text"><span class="brand-k">ES 335</span><span class="brand-n">MLP vs n-gram</span></span>
+</a>
+<div class="rail-links">
+<a href="#question" data-spy="question">Question</a>
+<a href="#predict" data-spy="predict">How it works</a>
+<a href="#context" data-spy="context">Context</a>
+<a href="#validity" data-spy="validity">Valid code</a>
+<a href="#brackets" data-spy="brackets">Why it breaks</a>
+<a href="#repos" data-spy="repos">New repositories</a>
+<a href="#playground" data-spy="playground">Try it</a>
+<a href="#method" data-spy="method">Method</a>
+<a href="#evaluation" data-spy="evaluation">Evaluation</a>
+<a href="#conclusion" data-spy="conclusion">Conclusion</a>
+<a href="#reproduce" data-spy="reproduce">Reproduce</a>
+</div>
+<a class="rail-ext" href="https://github.com/DeepBuha06/ES335">Source code</a>
 </nav>
-
+<div class="page">
 <noscript><p class="note">The visuals on this page are drawn with JavaScript.</p></noscript>
 
 <header class="intro wide" id="question">
 <div class="intro-text">
-<p class="byline">ES 335 individual project &middot; Buha Deep Maheshbhai (24110082)</p>
+<p class="byline">ES 335 course project &middot; Buha Deep Maheshbhai (24110082) &middot; Panchal Heet Chirag (24110235)</p>
 <p class="kicker">Question</p>
 <h1>Syntax learning and generalization in MLP-based Python code generation</h1>
 <p class="lede">I trained small neural networks to continue Python code, each one able to see a fixed number of previous tokens, and compared them with a classic n-gram model. The question is how much visible code matters for predicting the next token, for writing code that Python accepts, and for code from projects the models never saw.</p>
-<p>Each training example is the next token in a Python function, predicted from a fixed window of earlier tokens and from nothing else. A function is one row of the dataset. The guess is made one token at a time, with the rest of the function still unwritten. The claim covers that next-token probability and whether Python's parser accepts the completion. Running the code is outside the claim.</p>
+<p class="claim">A function is one row. Each training example is the next token, predicted from a fixed window of earlier tokens and from nothing else. The two scores below answer different questions.</p>
+<div class="tasks">
+<div>
+<h3>Next-token perplexity</h3>
+<p>The model is shown the real earlier tokens and scored on the true next token. Lower perplexity means it put more probability on the token that was actually there.</p>
 </div>
 <div>
+<h3>Syntax of a written ending</h3>
+<p>The model is shown the first line and <span data-v="validity.config.prompt_body_tokens" data-f="int"></span> further tokens, then writes the rest from its own guesses. The headline rate is the share that both finish and parse. The table also divides the valid count by every sample, including ones stopped at the length limit.</p>
+</div>
+</div>
+</div>
+<div class="intro-side">
+<p class="kicker">At a glance</p>
 <div class="tiles" id="tiles" aria-label="Headline comparison"></div>
 <p class="note">The tiles show the longest MLP window and the highest-order n-gram. Every context length and n-gram order was fixed before the test run and is listed in the tables below.</p>
 </div>
@@ -51,7 +79,7 @@
 <p class="kicker">2 &middot; Result</p>
 <h2>More visible code, better guesses</h2>
 <p>Perplexity is the exponential of the average next-token cross-entropy: roughly how many tokens the model is still choosing between. Lower is better. On repositories the models never saw, the MLP goes from <span data-v="perplexity.summary.mlp3.test_ood.ppl_mean" data-f="f2"></span> with <span data-v="perplexity.model_info.mlp3.context" data-f="int"></span> tokens of context to <span data-v="perplexity.summary.mlp20.test_ood.ppl_mean" data-f="f2"></span> with <span data-v="perplexity.model_info.mlp20.context" data-f="int"></span>. The n-gram stops improving at <span data-v="perplexity.summary.ngram5.test_ood.ppl_mean" data-f="f2"></span>, because longer exact token sequences are rarely seen twice.</p>
-<p>With the same <span data-v="perplexity.model_info.mlp3.context" data-f="int"></span> tokens of context the MLP is also better: <span data-v="perplexity.summary.mlp3.test_ood.ppl_mean" data-f="f2"></span> against <span data-v="perplexity.summary.ngram4.test_ood.ppl_mean" data-f="f2"></span> for the order-<span data-v="perplexity.model_info.ngram4.order" data-f="int"></span> n-gram.</p>
+<p>With the same <span data-v="perplexity.model_info.mlp3.context" data-f="int"></span> tokens of context the MLP is also better: <span data-v="perplexity.summary.mlp3.test_ood.ppl_mean" data-f="f2"></span> against <span data-v="perplexity.summary.ngram4.test_ood.ppl_mean" data-f="f2"></span> for the order-<span data-v="perplexity.model_info.ngram4.order" data-f="int"></span> n-gram. This is not a pure test of window length. The context-<span data-v="perplexity.model_info.mlp3.context" data-f="int"></span> MLP has <span data-v="perplexity.model_info.mlp3.n_params" data-f="int"></span> weights and the context-<span data-v="perplexity.model_info.mlp20.context" data-f="int"></span> MLP has <span data-v="perplexity.model_info.mlp20.n_params" data-f="int"></span>, because the first layer grows with the window. Learning rate and hidden size were chosen at context <span data-v="perplexity.model_info.mlp10.context" data-f="int"></span> on a short validation run and then kept for the other lengths.</p>
 <details class="more"><summary>All numbers</summary><div class="tablewrap" id="tbl-ppl"></div></details>
 </div>
 <figure class="scene-vis panel" id="fig-ppl">
@@ -81,6 +109,8 @@
 <h2>Why the code breaks: brackets</h2>
 <p>Most invalid samples fail on a bracket: one that is never closed, or closed with the wrong kind. To close a bracket correctly a model has to know it was opened, and with a short window the opening bracket may already be out of view.</p>
 <p>The examples are real samples from the test run that failed on a bracket. The arc joins the opening bracket to the one the parser rejected; the shaded band is what the model could see when it wrote that bracket.</p>
+<p>Brackets are the usual way a sample fails to parse. The probability loss sits somewhere else. On unseen repositories the context-<span data-v="perplexity.model_info.mlp20.context" data-f="int"></span> MLP still has identifier loss of <span data-v="category_loss.mlp20.test_ood.identifier.mean_nll" data-f="f2"></span> nats, against <span data-v="category_loss.mlp20.test_ood.layout.mean_nll" data-f="f2"></span> for indentation and newlines. Names stay hard after the brackets are mostly right.</p>
+<div class="tablewrap" id="tbl-loss"></div>
 <div id="fail-bars"></div>
 </div>
 <figure class="scene-vis panel" id="fig-bracket">
@@ -119,12 +149,13 @@
 <div>
 <h3>The data</h3>
 <p>The source is CodeSearchNet's Python functions: <span data-v="phase0_recon.n_functions_total" data-f="int"></span> functions from <span data-v="phase0_recon.n_repos_total" data-f="int"></span> repositories, dataset <span data-v="phase0_recon.source.hf_repo" data-f="txt"></span> at revision <span data-v="phase0_recon.source.revision" data-f="txt"></span>. I pooled the official train, validation, and test files and then made the splits below. The training split still contains <span data-v="phase1_report.splits.train.orig_csn_split.test" data-f="int"></span> functions from the official test file. The reported numbers evaluate this repository split.</p>
-<p>Before the split I dropped functions that current Python cannot parse (<span data-v="phase1_report.filter.ast_fail" data-f="int"></span>), functions longer than <span data-v="phase1_report.config.max_tokens" data-f="int"></span> tokens (that cap keeps <span data-v="phase1_report.filter.max_tokens_is_percentile" data-f="f1"></span> percent of functions that parsed), and <span data-v="phase1_report.dedup.near_removed" data-f="int"></span> near-duplicates (<span data-v="phase1_report.dedup.near_dup_groups_spanning_repos" data-f="int"></span> of those groups crossed repositories). I then kept at most <span data-v="phase1_report.sampling.max_per_repo" data-f="int"></span> functions per repository. The vocabulary of <span data-v="phase1_report.vocab.size_incl_specials" data-f="int"></span> tokens was counted on training functions only; every other name becomes one unknown token. Comments, docstrings, and literal values are removed. Validation and the unseen-repository test share no repository with training. The seen-repository test holds out functions only.</p>
+<p>Before the split I dropped functions that current Python cannot parse (<span data-v="phase1_report.filter.ast_fail" data-f="int"></span>), functions longer than <span data-v="phase1_report.config.max_tokens" data-f="int"></span> tokens (that cap keeps <span data-v="phase1_report.filter.max_tokens_is_percentile" data-f="f1"></span> percent of functions that parsed), and <span data-v="phase1_report.dedup.near_removed" data-f="int"></span> near-duplicates (<span data-v="phase1_report.dedup.near_dup_groups_spanning_repos" data-f="int"></span> of those groups crossed repositories). I then kept at most <span data-v="phase1_report.sampling.max_per_repo" data-f="int"></span> functions per repository. Those length and duplicate decisions used the pooled file, including rows that later became test. They were not fit on training rows alone. The vocabulary of <span data-v="phase1_report.vocab.size_incl_specials" data-f="int"></span> tokens was counted on training functions only; every other name becomes one unknown token. Comments, docstrings, and literal values are removed.</p>
+<p>The seen-repository test has <span data-v="phase1_report.splits.test_id.n_functions" data-f="int"></span> functions from repositories that also appear in training. The unseen-repository test has <span data-v="phase1_report.splits.test_ood.n_functions" data-f="int"></span> functions from repositories absent from training and validation. The two sets differ in size and in which repositories they contain, so the gap between them mixes those differences with the change in perplexity. Validation shares no repository with training.</p>
 <div class="tablewrap" id="tbl-splits"></div>
 </div>
 <div>
 <h3>The models</h3>
-<p>Both models assign a probability to the next token. The MLP minimizes next-token cross-entropy. The n-gram is interpolated Kneser&ndash;Ney smoothing with three discounts per order, fit on training counts only, which lowered the order-<span data-v="perplexity.model_info.ngram5.order" data-f="int"></span> validation perplexity from <span data-v="phase2_ngram.ablation.val_ppl.5" data-f="f2"></span> to <span data-v="phase2_ngram.models.3.val_ppl" data-f="f2"></span>. The MLP has one hidden layer of <span data-v="perplexity.model_info.mlp20.hidden" data-f="int"></span> units on top of <span data-v="perplexity.model_info.mlp20.emb_dim" data-f="int"></span>-dimensional token vectors; only the input layer grows with the context, so longer contexts also mean more parameters. Learning rate, hidden size and dropout (<span data-v="perplexity.model_info.mlp20.dropout" data-f="f1"></span> for every context) were chosen on the validation split, and each MLP was trained with <span data-v="perplexity.summary.mlp20.val.n_seeds" data-f="int"></span> seeds.</p>
+<p>Both models assign a probability to the next token. The MLP minimizes next-token cross-entropy. The n-gram is interpolated Kneser&ndash;Ney smoothing with three discounts per order, fit on training counts only, which lowered the order-<span data-v="perplexity.model_info.ngram5.order" data-f="int"></span> validation perplexity from <span data-v="phase2_ngram.ablation.val_ppl.5" data-f="f2"></span> to <span data-v="phase2_ngram.models.3.val_ppl" data-f="f2"></span>. The MLP has one hidden layer of <span data-v="perplexity.model_info.mlp20.hidden" data-f="int"></span> units on top of <span data-v="perplexity.model_info.mlp20.emb_dim" data-f="int"></span>-dimensional token vectors. Learning rate and hidden size were chosen at context <span data-v="perplexity.model_info.mlp10.context" data-f="int"></span> and reused. Dropout (<span data-v="perplexity.model_info.mlp20.dropout" data-f="f1"></span> at every context) was chosen on the validation split. Each MLP was trained with <span data-v="perplexity.summary.mlp20.val.n_seeds" data-f="int"></span> seeds. That same validation split also decides when training stops, so validation perplexity is a little kinder than a split that did not choose the settings. The test numbers were not used for those choices.</p>
 <div id="mlp-diagram"></div>
 <div class="tablewrap" id="tbl-models"></div>
 </div>
@@ -138,9 +169,9 @@
 <div class="wide">
 <p class="kicker">8 &middot; Evaluation</p>
 <h2>How the comparison was judged</h2>
-<p class="narrow">The grid was fixed before any test number was computed: every n-gram order and every MLP context in the model table, at the temperatures stored with the validity results. Learning rate, hidden size, and dropout were chosen on the validation split, and early stopping watches validation loss. The same vocabulary, prompts, and stopping rule are used for every model. The reported test numbers come from one run of <code>scripts/phase4_eval.py</code>. That script is the only one allowed to open the test files. A development flag runs the same code on the validation split instead.</p>
-<p class="narrow">Perplexity is the exponential of the mean next-token cross-entropy, so a model that puts probability one over P on the true token has perplexity P. MLP figures are means over <span data-v="perplexity.summary.mlp20.test_ood.n_seeds" data-f="int"></span> training seeds, and the error bars are the spread of those seeds. The rise from seen to unseen repositories uses a bootstrap interval made by resampling functions inside each set.</p>
-<p class="narrow">Syntax validity is the share of completions that stopped on their own and that <code>ast.parse</code> accepts. Unfinished samples are reported separately and stay out of the denominator. At temperature <span data-v="validity.config.temperatures.0" data-f="f1"></span> the unfinished share is similar across models. At temperature <span data-v="validity.config.temperatures.1" data-f="f1"></span> the context-<span data-v="perplexity.model_info.mlp20.context" data-f="int"></span> MLP leaves <span data-v="validity_by_model.mlp20.t05.all.truncated" data-f="int"></span> of <span data-v="validity_by_model.mlp20.t05.all.completions" data-f="int"></span> samples unfinished, against <span data-v="validity_by_model.ngram5.t05.all.truncated" data-f="int"></span> for the order-<span data-v="perplexity.model_info.ngram5.order" data-f="int"></span> n-gram, so the higher rate at that temperature is among samples that finished.</p>
+<p class="narrow">The grid was fixed before any test number was computed: every n-gram order and every MLP context in the model table, at the temperatures stored with the validity results. Learning rate and hidden size were chosen at context <span data-v="perplexity.model_info.mlp10.context" data-f="int"></span> on the validation split and reused. Dropout was chosen on that same split. Early stopping watches it too, so the validation perplexity is a little kinder than it would be on a split that took no part in the choices. The test files were not used for any of those choices. The same vocabulary, prompts, and stopping rule are used for every model. The reported test numbers come from one run of <code>scripts/phase4_eval.py</code>. That script is the only one allowed to open the test files.</p>
+<p class="narrow">Perplexity is the exponential of the mean next-token cross-entropy on the real next token, with the real earlier tokens shown to the model. MLP figures are means over <span data-v="perplexity.summary.mlp20.test_ood.n_seeds" data-f="int"></span> training seeds, and the error bars are the spread of those seeds. The rise from seen to unseen repositories uses a bootstrap interval made by resampling functions inside each set. It does not remove the difference in size between the <span data-v="phase1_report.splits.test_id.n_functions" data-f="int"></span> seen-repository functions and the <span data-v="phase1_report.splits.test_ood.n_functions" data-f="int"></span> unseen-repository functions.</p>
+<p class="narrow">Syntax validity in the squares is the share of samples that stopped on their own and that <code>ast.parse</code> accepts. The number table has a second column: valid samples divided by every sample, including ones cut off at the length limit. At temperature <span data-v="validity.config.temperatures.0" data-f="f1"></span> the unfinished share is similar across models. At temperature <span data-v="validity.config.temperatures.1" data-f="f1"></span> the context-<span data-v="perplexity.model_info.mlp20.context" data-f="int"></span> MLP leaves <span data-v="validity_by_model.mlp20.t05.all.truncated" data-f="int"></span> of <span data-v="validity_by_model.mlp20.t05.all.completions" data-f="int"></span> samples unfinished, against <span data-v="validity_by_model.ngram5.t05.all.truncated" data-f="int"></span> for the order-<span data-v="perplexity.model_info.ngram5.order" data-f="int"></span> n-gram.</p>
 </div>
 </section>
 
@@ -160,6 +191,8 @@
 <p class="kicker">10 &middot; Reproduction</p>
 <h2>How to reproduce the page</h2>
 <p class="narrow">The data is Hugging Face <span data-v="phase0_recon.source.hf_repo" data-f="txt"></span>, Python files, revision <span data-v="phase0_recon.source.revision" data-f="txt"></span>. A fresh download is checked against the recorded file hashes. Raw functions stay under <code>data/raw</code> and are left out of the repository. The split uses seed <span data-v="phase1_report.seed" data-f="int"></span>. Commands, timings, and output paths are in the <a href="https://github.com/DeepBuha06/ES335">repository README</a>. Result files land in <code>results/</code> and are copied to <code>site/data</code>. This page reads those files. To open it locally: <code>cd site &amp;&amp; python -m http.server 8000</code>. The published copy is the <a href="https://deepbuha06.github.io/ES335/">GitHub Pages site</a>.</p>
+<h3>Who did what</h3>
+<p class="narrow">Buha Deep Maheshbhai built the data pipeline, the n-gram and MLP models, and the evaluation. Panchal Heet Chirag reworked this page: the layout, the side-by-side account of the two scores, and the tables for unfinished samples and token-category loss.</p>
 <h3>Tools and assistance</h3>
 <p class="narrow">AI coding assistants were used for coding, debugging, editing, and visualization, including Cursor for the text on this page. I checked the displayed numbers against the files in <code>site/data</code>. I am responsible for the code, the numbers, and the claims.</p>
 <h3>Sources</h3>
@@ -171,6 +204,8 @@
 </div>
 </div>
 </section>
+</div>
+</div>
 
 <script type="module" src="js/main.js"></script>
 </body>

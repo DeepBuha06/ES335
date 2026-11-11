@@ -14,7 +14,7 @@ function tiles(D) {
   const defs = [
     { label: "Perplexity on unseen repositories (lower is better)", val: (id) => S[id].test_ood.ppl_mean, f: fmt.f2, scale: (v, m) => v / m },
     { label: `Written code that is valid Python, temperature ${fmt.t(T0)}`, val: (id) => VB[id][k].all.rate, f: fmt.pct1, scale: (v) => v },
-    { label: "Perplexity increase on unseen repositories", val: (id) => G[id].gap, f: fmt.spct1, scale: (v, m) => v / m },
+    { label: "Perplexity increase on unseen repositories (lower is better)", val: (id) => G[id].gap, f: fmt.spct1, scale: (v, m) => v / m },
   ];
   defs.forEach((d) => {
     const va = d.val(a), vb = d.val(b), mx = Math.max(va, vb);
@@ -69,6 +69,7 @@ async function main() {
   $("tbl-validity").innerHTML = V.tableValidity(D);
   initBrackets($("fig-bracket"), $("bracket-cap"), D);
   V.failureBars($("fail-bars"), D);
+  $("tbl-loss").innerHTML = V.tableCategoryLoss(D);
   V.slopeChart($("fig-slope"), D);
   V.pipeline($("pipeline"), D);
   V.mlpDiagram($("mlp-diagram"), D);

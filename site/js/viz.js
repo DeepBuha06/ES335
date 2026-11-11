@@ -278,10 +278,21 @@ export function tablePerplexity(D) {
 }
 export function tableValidity(D) {
   const V = D.validity_by_model;
-  let h = `<table><thead><tr>${th("model")}${th("T", "n")}${th("valid", "n")}${th("95% CI", "n")}${th("finished", "n")}${th("cut off", "n")}</tr></thead><tbody>`;
+  let h = `<table><thead><tr>${th("model")}${th("T", "n")}${th("of finished", "n")}${th("of every sample", "n")}${th("95% CI", "n")}${th("finished", "n")}${th("cut off", "n")}</tr></thead><tbody>`;
   MODEL_IDS.forEach((id) => Object.values(V[id]).forEach((byT) => {
     const r = byT.all;
-    h += `<tr><td>${modelLabel(id)}</td><td class="n">${fmt.t(r.T)}</td><td class="n">${fmt.pct1(r.rate)}</td><td class="n">${fmt.pct1(r.ci[0])}–${fmt.pct1(r.ci[1])}</td><td class="n">${fmt.int(r.natural)}</td><td class="n">${fmt.int(r.truncated)}</td></tr>`;
+    const ofAll = r.completions ? r.valid / r.completions : 0;
+    h += `<tr><td>${modelLabel(id)}</td><td class="n">${fmt.t(r.T)}</td><td class="n">${fmt.pct1(r.rate)}</td><td class="n">${fmt.pct1(ofAll)}</td><td class="n">${fmt.pct1(r.ci[0])}–${fmt.pct1(r.ci[1])}</td><td class="n">${fmt.int(r.natural)}</td><td class="n">${fmt.int(r.truncated)}</td></tr>`;
   }));
   return h + "</tbody></table>";
+}
+export function tableCategoryLoss(D) {
+  const C = D.category_loss;
+  const cats = ["identifier", "keyword", "operator/punct", "layout", "literal", "unk", "eos"];
+  const ids = ["ngram5", "mlp3", "mlp20"];
+  let h = `<table><thead><tr>${th("token kind, unseen repositories")}${ids.map((id) => th(modelLabel(id), "n")).join("")}</tr></thead><tbody>`;
+  cats.forEach((c) => {
+    h += `<tr><td>${c}</td>${ids.map((id) => `<td class="n">${fmt.f2(C[id].test_ood[c].mean_nll)}</td>`).join("")}</tr>`;
+  });
+  return h + `</tbody></table><p class="vis-cap">Mean next-token loss in nats on unseen repositories. A higher number means less probability on the true token.</p>`;
 }
