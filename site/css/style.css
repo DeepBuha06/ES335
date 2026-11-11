@@ -30,10 +30,10 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 400 1.0625rem/
 /* top bar */
 .topbar {
   position: sticky; top: 0; z-index: 20; background: var(--bg); border-bottom: 1px solid var(--hair);
-  display: flex; align-items: center; gap: 1.4rem; padding: 0 var(--gutter); height: 3.25rem; overflow-x: auto; white-space: nowrap;
+  display: flex; align-items: center; gap: .85rem; padding: 0 var(--gutter); height: 3.25rem; overflow-x: auto; white-space: nowrap;
 }
 .topbar .brand { font: 600 .95rem var(--sans); color: var(--ink); margin-right: auto; }
-.topbar a { color: var(--ink-2); text-decoration: none; font-size: .88rem; padding: .35rem 0; border-bottom: 1px solid transparent; }
+.topbar a { color: var(--ink-2); text-decoration: none; font-size: .8rem; padding: .35rem 0; border-bottom: 1px solid transparent; }
 .topbar a:hover { color: var(--ink); }
 .topbar a.on { color: var(--ink); border-bottom-color: var(--ink); }
 .topbar a:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
@@ -227,6 +227,7 @@ svg .lab-strong { fill: var(--ink); font-weight: 600; font-size: 13px; }
 .pipe .p-split i { display: block; }
 .pipe .p-code { font: .76rem/1.5 var(--mono); color: var(--ink); margin-top: .4rem; overflow-wrap: anywhere; }
 @media (max-width: 980px) { .pipeline { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.refs p { font-size: .92rem; color: var(--ink-2); max-width: 46rem; }
 .method-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 3rem; margin-top: 1rem; }
 @media (max-width: 980px) { .method-grid { grid-template-columns: minmax(0, 1fr); gap: 1rem; } }
 #mlp-diagram { margin-top: 1.2rem; }

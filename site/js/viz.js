@@ -256,7 +256,7 @@ export function pipeline(host, D) {
   host.append(
     box(fmt.int(R0.n_functions_total), `Python functions in CodeSearchNet, from ${fmt.int(R0.n_repos_total)} repositories`),
     box(fmt.int(R1.sampling.n_sampled), `kept after removing unparseable, very long and duplicate functions, at most ${R1.sampling.max_per_repo} per repository`),
-    box("4 splits", "split by repository: test repositories never appear in training",
+    box("4 splits", "validation and the unseen-repository test use new repositories. The seen-repository test holds out functions from training repositories",
       `<div class="p-split">${order.map((k) => `<i style="width:${(100 * S[k].n_functions) / tot}%;background:${cols[k]}" title="${names[k]}: ${fmt.int(S[k].n_functions)} functions"></i>`).join("")}</div>` +
       `<div class="p-lab">${order.map((k) => `<span class="swatch sq" style="background:${cols[k]}"></span>${names[k]}`).join("<br>")}</div>`),
     box(fmt.int(S.train.n_tokens), "training tokens; each function becomes a list like:",

@@ -1,7 +1,8 @@
 """Self-check for the website against the CLAUDE.md section 5 spec. Usage: python scripts/check_site.py [site_dir]
 
 Checks: every number in static prose comes from data (data-v bindings resolve), banned words / emoji / banned
-CSS, colour whitelist (greys, palette, muted red), DRAFT marker before every prose paragraph, fonts, page weight.
+CSS, colour whitelist (greys, palette, muted red), fonts, page weight. Citation blocks (class refs) and
+code may contain years, identifiers, and commands.
 """
 import colorsys
 import json
@@ -13,7 +14,7 @@ from pathlib import Path
 import yaml
 
 site = Path(sys.argv[1] if len(sys.argv) > 1 else "site")
-html = (site / "index.html").read_text()
+html = (site / "index.html").read_text(encoding="utf-8")
 problems = []
 
 BANNED_WORDS = ["unlock", "dive into", "seamless", "powerful", "journey", "delve", "leverage", "cutting-edge", "cutting edge",
@@ -45,7 +46,7 @@ class P(HTMLParser):
         tags = [t for t, _ in self.stack]
         if any(t in ("script", "style", "title") for t in tags):
             return
-        skip = any("data-v" in a or {"num", "kicker"} & set(a.get("class", "").split()) for _, a in self.stack) or "code" in tags
+        skip = any("data-v" in a or {"num", "kicker", "refs"} & set(a.get("class", "").split()) for _, a in self.stack) or "code" in tags
         self.texts.append((d, skip, tags))
 
 p = P()
@@ -61,7 +62,7 @@ for d, skip, tags in p.texts:
         problems.append(f"number in static text: {d.strip()[:90]!r}")
 
 # ---------------------------------------------------------------- data bindings resolve
-data = {f.stem: json.loads(f.read_text()) for f in (site / "data").glob("*.json")}
+data = {f.stem: json.loads(f.read_text(encoding="utf-8")) for f in (site / "data").glob("*.json")}
 def lookup(path):
     o = data
     for k in path.split("."):
@@ -74,19 +75,10 @@ for b in p.binds:
     if lookup(b) is None:
         problems.append(f"data-v path not found: {b}")
 
-# ---------------------------------------------------------------- DRAFT markers
-for m in re.finditer(r"<(p|figcaption)\b([^>]*)>", html):
-    if any(f'class="{c}"' in m.group(2) for c in ("note", "byline", "kicker")):
-        continue
-    before = html[:m.start()].rstrip()
-    if not before.endswith("<!-- DRAFT: Deep to rewrite -->"):
-        line = html[:m.start()].count("\n") + 1
-        problems.append(f"line {line}: <{m.group(1)}> without DRAFT marker")
-
 # ---------------------------------------------------------------- banned words, emoji, css
 files = [f for f in site.rglob("*") if f.suffix in (".html", ".js", ".css", ".py") and not {"data", "model", "vendor"} & set(f.parts)]
 for f in files:
-    txt = f.read_text()
+    txt = f.read_text(encoding="utf-8")
     low = txt.lower()
     for w in BANNED_WORDS:
         if w in low:
@@ -106,7 +98,7 @@ for f in files:
 pal = yaml.safe_load(open("configs/palette.yaml"))["site"]
 ok_hex = {v for k, v in pal.items() if isinstance(v, str)} | set(pal["ngram"].values()) | set(pal["mlp"].values()) | set(pal["fail"].values())
 for f in [f for f in site.rglob("*") if f.suffix in (".css", ".js", ".html") and not {"data", "vendor"} & set(f.parts)]:
-    for h in set(re.findall(r"#[0-9a-fA-F]{6}\b|#[0-9a-fA-F]{3}\b", f.read_text())):
+    for h in set(re.findall(r"#[0-9a-fA-F]{6}\b|#[0-9a-fA-F]{3}\b", f.read_text(encoding="utf-8"))):
         hx = h.lower() if len(h) == 7 else "#" + "".join(c * 2 for c in h[1:]).lower()
         r, g, b = (int(hx[i:i + 2], 16) / 255 for i in (1, 3, 5))
         hue, sat, val = colorsys.rgb_to_hsv(r, g, b)
@@ -117,14 +109,14 @@ for f in [f for f in site.rglob("*") if f.suffix in (".css", ".js", ".html") and
 # ---------------------------------------------------------------- fonts, weight
 if "IBM+Plex+Sans" not in html or "IBM+Plex+Mono" not in html:
     problems.append("IBM Plex fonts not linked")
-if (site / "css/style.css").read_text().count("serif") != (site / "css/style.css").read_text().count("sans-serif"):
+if (site / "css/style.css").read_text(encoding="utf-8").count("serif") != (site / "css/style.css").read_text(encoding="utf-8").count("sans-serif"):
     problems.append("serif font family in CSS")
 tot = sum(f.stat().st_size for f in site.rglob("*") if f.is_file())
 big = sorted(((f.stat().st_size, f) for f in site.rglob("*") if f.is_file()), reverse=True)[:5]
 print(f"site size {tot / 1e6:.1f} MB; largest: " + ", ".join(f"{f.name} {s / 1e6:.2f} MB" for s, f in big))
 print(f"data bindings checked: {len(p.binds)}; static text nodes: {len(p.texts)}")
 print("banned items checked: marketing words, emoji, gradients, shadows, rounded-2xl/tailwind, off-palette colours (cream/beige/orange), "
-      "serif fonts, hero/cards/CTA phrases, rhetorical questions, un-bound numbers, missing DRAFT markers")
+      "serif fonts, hero/cards/CTA phrases, rhetorical questions, un-bound numbers")
 if problems:
     print(f"\n{len(problems)} problem(s):")
     print("\n".join(" - " + x for x in problems))

@@ -26,6 +26,7 @@ export const fmt = {
   spct1: (x) => `${x >= 0 ? "+" : "\u2212"}${(100 * Math.abs(x)).toFixed(1)}%`,
   pct0: (x) => `${(100 * x).toFixed(0)}%`, pct1: (x) => `${(100 * x).toFixed(1)}%`,
   t: (x) => Number(x).toFixed(1),
+  txt: (x) => String(x),
   mb: (x) => `${(x / 1e6).toFixed(1)}`, m: (x) => `${(x / 1e6).toFixed(2)}M`,
 };
 

@@ -8,29 +8,34 @@ const $ = (id) => document.getElementById(id);
 function tiles(D) {
   const S = D.perplexity.summary, G = D.perplexity.gaps, pal = D.palette, VB = D.validity_by_model;
   const T0 = D.validity.config.temperatures[0], k = `t${String(Math.round(10 * T0)).padStart(2, "0")}`;
-  const ng = MODEL_IDS.filter(isNgram), ml = MODEL_IDS.filter((id) => !isNgram(id));
-  const best = (list, f, low) => list.reduce((b, id) => (b == null || (low ? f(id) < f(b) : f(id) > f(b)) ? id : b), null);
-  const ood = (id) => S[id].test_ood.ppl_mean, rate = (id) => VB[id][k].all.rate;
+  // Fixed pair: longest MLP window and highest n-gram order. Both were in the
+  // pre-specified grid; the charts and tables still show every setting.
+  const a = "mlp20", b = "ngram5";
   const defs = [
-    { label: "Perplexity on unseen repositories (lower is better)", a: best(ml, ood, true), b: best(ng, ood, true), val: ood, f: fmt.f2, scale: (v, m) => v / m },
-    { label: `Written code that is valid Python, temperature ${fmt.t(T0)}`, a: best(ml, rate, false), b: best(ng, rate, false), val: rate, f: fmt.pct1, scale: (v) => v },
-    { label: "Perplexity increase on unseen repositories", a: best(ml, ood, true), b: best(ng, ood, true), val: (id) => G[id].gap, f: fmt.spct1, scale: (v, m) => v / m },
+    { label: "Perplexity on unseen repositories (lower is better)", val: (id) => S[id].test_ood.ppl_mean, f: fmt.f2, scale: (v, m) => v / m },
+    { label: `Written code that is valid Python, temperature ${fmt.t(T0)}`, val: (id) => VB[id][k].all.rate, f: fmt.pct1, scale: (v) => v },
+    { label: "Perplexity increase on unseen repositories", val: (id) => G[id].gap, f: fmt.spct1, scale: (v, m) => v / m },
   ];
   defs.forEach((d) => {
-    const va = d.val(d.a), vb = d.val(d.b), mx = Math.max(va, vb);
+    const va = d.val(a), vb = d.val(b), mx = Math.max(va, vb);
     const row = (id, v, minor) => `<div class="t-row${minor ? " minor" : ""}"><span class="swatch ${isNgram(id) ? "sq" : "ci"}" style="background:${modelColor(id, pal)}"></span><span class="t-name">${modelLabel(id)}</span><span class="t-val">${d.f(v)}</span></div>` +
       `<div class="t-bar"><i style="width:${(100 * d.scale(v, mx)).toFixed(1)}%;background:${modelColor(id, pal)}"></i></div>`;
     const t = document.createElement("div");
     t.className = "tile";
-    t.innerHTML = `<div class="t-label">${d.label}</div>${row(d.a, va, false)}${row(d.b, vb, true)}`;
+    t.innerHTML = `<div class="t-label">${d.label}</div>${row(a, va, false)}${row(b, vb, true)}`;
     $("tiles").appendChild(t);
   });
 }
 
 function splitsTable(D) {
   const S = D.phase1_report.splits;
-  const rows = [["train", "train", "training"], ["val", "validation", "not in training"], ["test_id", "test, seen repos", "also in training"], ["test_ood", "test, unseen repos", "not in training"]];
-  return `<table><thead><tr><th>split</th><th>repositories</th><th class="n">functions</th><th class="n">repositories</th><th class="n">unknown-name share</th></tr></thead><tbody>` +
+  const rows = [
+    ["train", "train", "fits the models and the vocabulary"],
+    ["val", "validation", "held-out repositories; used for tuning"],
+    ["test_id", "test, seen repos", "functions held out; repositories also used in training"],
+    ["test_ood", "test, unseen repos", "repositories absent from training and validation"],
+  ];
+  return `<table><thead><tr><th>split</th><th>role</th><th class="n">functions</th><th class="n">repositories</th><th class="n">unknown-name share</th></tr></thead><tbody>` +
     rows.map(([k, n, note]) => `<tr><td>${n}</td><td class="muted">${note}</td><td class="n">${fmt.int(S[k].n_functions)}</td><td class="n">${fmt.int(S[k].n_repos)}</td><td class="n">${fmt.pct1(S[k].unk_rate)}</td></tr>`).join("") +
     "</tbody></table>";
 }
