@@ -119,4 +119,5 @@ code, the numbers, and the claims.
 - Yoshua Bengio, Réjean Ducharme, Pascal Vincent, and Christian Jauvin. A neural probabilistic language model.
   Journal of Machine Learning Research 3, 2003. https://www.jmlr.org/papers/v3/bengio03a.html
 - Page libraries: CodeMirror 6 (MIT, `site/vendor/LICENSE-codemirror.txt`), D3, ONNX Runtime Web, and Pyodide.
+- Fonts: Atkinson Hyperlegible Next and Atkinson Hyperlegible Mono (SIL Open Font License, `site/vendor/fonts/OFL.txt`).
   Training uses PyTorch. The n-gram is NumPy only.

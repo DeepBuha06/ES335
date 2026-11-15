@@ -78,6 +78,7 @@
 <section id="data" class="sec">
 <h2 class="col">Data</h2>
 <p class="col">The functions come from CodeSearchNet, a public collection of open-source code. Its Python part holds <span data-v="phase0_recon.n_functions_total" data-f="int"></span> functions from <span data-v="phase0_recon.n_repos_total" data-f="int"></span> repositories on GitHub.</p>
+<p class="col">The dataset is public on Hugging Face, so anyone can download the same pinned version without an account. The downloaded data is not stored in the repository; the first script fetches it and checks its file hashes.</p>
 <p class="col">The fields used from each row are the function&rsquo;s source code, its name, its file path, its repository and the official split it came from. The models read only the code; the repository name decides the split.</p>
 <p class="col">The raw data has quality problems. <span data-v="phase1_report.filter.ast_fail" data-f="int"></span> functions are not valid Python 3, some are extremely long, some are copies of each other, and one repository, <code>saltstack/salt</code>, has <span data-v="phase0_recon.splits.train.functions_per_repo.max" data-f="int"></span> functions in the official training file alone. Preprocessing deals with each.</p>
 <p class="col">Whole repositories are held out, not just functions. Validation and one of the two test sets come from repositories that training never touched, so they show how the models do on projects they have never seen.</p>
@@ -121,6 +122,7 @@
 <p class="col">Both models read code as a list of tokens and give every possible next token a probability. They differ in how much they see, and in how they turn it into a guess.</p>
 <p class="col">The <span class="k-ngram">n-gram</span> is the baseline. It counts how often each token followed the same short run of tokens in the training code. An order-<span data-v="perplexity.model_info.ngram5.order" data-f="int"></span> <span class="k-ngram">n-gram</span> looks at the last <span data-v="perplexity.model_info.ngram5.context" data-f="int"></span> tokens. When that run never appeared in training, Kneser&ndash;Ney smoothing falls back to shorter runs, so no token gets zero probability.</p>
 <p class="col">The <span class="k-mlp">MLP</span> learns instead of counting. Each visible token becomes a list of <span data-v="perplexity.model_info.mlp20.emb_dim" data-f="int"></span> numbers, the lists are joined, and one hidden layer of <span data-v="perplexity.model_info.mlp20.hidden" data-f="int"></span> units turns them into a probability for every token in the vocabulary.</p>
+<p class="col">Both models assume the next token depends only on a fixed number of tokens before it. The <span class="k-mlp">MLP</span> is trained to minimise cross-entropy on the training functions, which is the same quantity perplexity reports.</p>
 
 <figure class="fig sees" id="sees" data-how="Drag the slider, or click 3, 5, 10 or 20, to change how much the MLP sees. Click any token to move the guess there.">
 <div class="sees-ctl field">
