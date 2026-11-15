@@ -17,7 +17,26 @@ export async function loadData() {
     const r = await fetch(`data/${n}.json`);
     return [n, r.ok ? await r.json() : null];
   }));
-  return Object.fromEntries(entries);
+  const D = Object.fromEntries(entries);
+  D.palette = themePalette(D.palette);
+  return D;
+}
+
+// The page's colours live in css/style.css (:root) and follow DESIGN.md: one colour per model family, used for every
+// setting of that family. Charts read them from CSS; palette.json (a results artefact) is left as it is.
+export function themePalette(base = {}) {
+  const cs = getComputedStyle(document.documentElement);
+  const v = (n) => cs.getPropertyValue(n).trim();
+  const ng = v("--ngram"), ml = v("--mlp");
+  return {
+    ...base,
+    background: v("--white"), panel: v("--white"), band: v("--white"), ink: v("--ink"), ink_secondary: v("--ink-2"),
+    hairline: v("--hair"), rule: v("--ink-2"), raised: v("--white"), chip: v("--hair"), active: v("--hair"),
+    muted: v("--ink-2"), body: v("--ink"), invalid: v("--reject"), highlight: v("--hl"),
+    ngram: { 2: ng, 3: ng, 4: ng, 5: ng },
+    mlp: { 3: ml, 5: ml, 10: ml, 20: ml },
+    fail: { "unbalanced brackets": v("--reject"), indentation: v("--ink-2"), "incomplete statement": v("--hair"), other: v("--ink"), valid: v("--hair") },
+  };
 }
 
 export const fmt = {
@@ -87,4 +106,76 @@ export function tooltip(host) {
     },
     hide() { el.style.display = "none"; },
   };
+}
+
+// One shared MLP-window setting (3/5/10/20). The stepper and the perplexity chart both follow it.
+export const ctxState = {
+  value: 20, fns: new Set(),
+  set(v) { v = +v; if (v === this.value) return; this.value = v; this.fns.forEach((f) => f(v)); },
+  on(f) { this.fns.add(f); },
+};
+
+// Textbook-style option choice: plain words; the active one is bold and underlined (in a model colour when
+// `kind` is "mlp" or "ngram"). Returns { el, set(value) }.
+export function choices(options, value, onChange, { kind = "", label = "" } = {}) {
+  const el = document.createElement("div");
+  el.className = `choices ${kind}`.trim();
+  el.setAttribute("role", "group");
+  if (label) el.setAttribute("aria-label", label);
+  const set = (v) => el.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.opt === String(v)));
+  options.forEach(([v, text]) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.dataset.opt = v; b.textContent = text;
+    b.addEventListener("click", () => { set(v); onChange(v); });
+    el.appendChild(b);
+  });
+  set(value);
+  return { el, set };
+}
+
+export function btn(text, cls = "") {
+  const b = document.createElement("button");
+  b.type = "button"; b.className = `btn ${cls}`.trim(); b.textContent = text;
+  return b;
+}
+
+// A labelled control: small grey label above the control.
+export function field(label, node) {
+  const f = document.createElement("div");
+  f.className = "field";
+  const l = document.createElement("span");
+  l.className = "field-lab"; l.textContent = label;
+  f.append(l, node);
+  return f;
+}
+
+/** x position (CSS) of stop `frac` (0..1) under a range input's thumb centre: thumb centres run from th/2 to 100%-th/2. */
+export const stopLeft = (frac) => `calc(var(--th) / 2 + (100% - var(--th)) * ${frac})`;
+
+// Range slider over a fixed list of values, with a tick and a clickable label under every stop. Returns { el, set(i) }.
+export function tickSlider(values, index, onChange, { label = "", kind = "", text = (v) => String(v) } = {}) {
+  const el = document.createElement("div");
+  el.className = `tick ${kind}`.trim();
+  const input = document.createElement("input");
+  Object.assign(input, { type: "range", min: 0, max: values.length - 1, step: 1, value: index });
+  if (label) input.setAttribute("aria-label", label);
+  const labs = document.createElement("div");
+  labs.className = "tick-labels";
+  const btns = values.map((v, i) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.textContent = text(v); b.tabIndex = -1;
+    b.style.left = stopLeft(values.length > 1 ? i / (values.length - 1) : 0);
+    b.addEventListener("click", () => { set(i); onChange(i); });
+    labs.appendChild(b);
+    return b;
+  });
+  const set = (i) => {
+    input.value = i;
+    input.setAttribute("aria-valuetext", text(values[i]));
+    btns.forEach((b, j) => b.setAttribute("aria-pressed", j === i));
+  };
+  input.addEventListener("input", () => { set(+input.value); onChange(+input.value); });
+  el.append(input, labs);
+  set(index);
+  return { el, set, input };
 }

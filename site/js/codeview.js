@@ -117,3 +117,19 @@ export function toSource(tokens) {
   return layoutTokens(tokens).map((ln) => "    ".repeat(ln.indent) +
     ln.items.map((it, k) => (k && it.space ? " " : "") + (SUB[tokens[it.i]] ?? tokens[it.i])).join("")).join("\n");
 }
+
+/** The highlighter motif: give tokens from..to-1 the yellow context-window band. Layout tokens have no visible span.
+ *  A token that follows a space on the same line also gets .hl-join, which paints that space, so the band is one
+ *  unbroken stroke. Returns the first visible span inside the window (or null). */
+export function markWindow(spans, from, to, cls = "hl") {
+  let first = null;
+  for (let i = Math.max(0, from); i < to; i++) {
+    const s = spans[i];
+    if (!s || s.classList.contains("cv-layout")) continue;
+    s.classList.add(cls);
+    const prev = s.previousSibling;
+    if (first && prev && prev.nodeType === 3 && prev.textContent === " ") s.classList.add(`${cls}-join`);
+    first ??= s;
+  }
+  return first;
+}

@@ -26,6 +26,14 @@ uv pip install --python .venv/bin/python -r requirements.lock   # exact versions
 .venv/bin/python -m pytest -q                                   # unit tests (some skip until data is built)
 ```
 
+## Data access
+
+The data is the Python part of CodeSearchNet on Hugging Face, `code-search-net/code_search_net`, pinned to
+revision `bd0cf261e357a3eb5c8fba490d23ec1a1cd59555` (`configs/data.yaml`). It is public, so no account or token
+is needed. Step 0 below downloads the parquet files over HTTPS into `data/raw/` and checks them against the
+SHA-256 hashes recorded in `configs/data.yaml`.
+`results/splits_repos.json` lists every repository in each split, with its number of functions.
+
 ## Reproduction, step by step
 
 Run times are what I measured on my laptop (RTX 3050 6 GB, 10 GB RAM in WSL2). All scripts use fixed seeds
@@ -99,7 +107,7 @@ tests/        pytest: tokenizer round trip, n-gram normalization and reference c
 ## AI use
 
 AI coding assistants were used for coding, debugging, editing, and visualization, including Cursor for the
-website text. Displayed numbers were checked against `results/` and `site/data/`. I am responsible for the
+website text and Claude Code for the page design. Displayed numbers were checked against `results/` and `site/data/`. I am responsible for the
 code, the numbers, and the claims.
 
 ## Sources

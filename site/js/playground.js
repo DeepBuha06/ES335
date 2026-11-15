@@ -1,17 +1,17 @@
 // Playground: compare an n-gram and an MLP continuation of a test function, rendered as readable code.
 // Preset samples come from explorer.json; an edited prompt is continued live by the MLP (live.js).
 import { renderCode, PLACEHOLDER, toSource } from "./codeview.js";
-import { MODEL_IDS, isNgram, modelLabel, modelColor, tooltip, fmt } from "./util.js";
+import { MODEL_IDS, isNgram, modelColor, tooltip, fmt, choices, btn as button, field } from "./util.js";
 
 const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
 const show = (t) => PLACEHOLDER[t]?.text ?? ({ "<NEWLINE>": "line break", "<INDENT>": "indent", "<DEDENT>": "dedent" }[t] ?? t);
-const PANEL = "#131519";
+const PANEL = "#FFFFFF"; // confidence shading mixes the model colour into the white page
 const rgb = (h) => { const n = parseInt(h.slice(1), 16); return [n >> 16, (n >> 8) & 255, n & 255]; };
 const lum = (c) => c.map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }).reduce((t, v, i) => t + v * [0.2126, 0.7152, 0.0722][i], 0);
 export function shade(color, p) {
   const a = 0.08 + 0.72 * p, b = rgb(PANEL), c = rgb(color);
   const m = b.map((v, i) => Math.round(v + (c[i] - v) * a));
-  return { bg: `rgb(${m.join(",")})`, fg: lum(m) > 0.3 ? "#0c0d0f" : "#e6e8eb" };
+  return { bg: `rgb(${m.join(",")})`, fg: lum(m) > 0.3 ? "#16161A" : "#FFFFFF" };
 }
 
 /** Plain-English reason for a parser failure. */
@@ -30,13 +30,13 @@ export function explain(run) {
   return { bad: true, text: "Python cannot read this line." };
 }
 
-function output(host, title, color, square) {
+function output(host, title, cls) {
   host.replaceChildren();
   const head = el("div", "head");
-  const sw = el("span", `swatch ${square ? "sq" : "ci"}`);
-  sw.style.background = color;
+  const name = el("span", `name ${cls}`.trim());
+  name.innerHTML = title;
   const verdict = el("span", "verdict");
-  head.append(sw, document.createTextNode(title), verdict);
+  head.append(name, verdict);
   const body = el("div", "body"), why = el("div", "explain");
   host.append(head, body, why);
   return { body, why, verdict };
@@ -68,6 +68,7 @@ function renderRun(ui, promptTokens, run, color, tip) {
   }
   ui.verdict.textContent = run.status === "truncated" ? "unfinished" : run.check.ok ? "valid Python" : "not valid Python";
   ui.verdict.classList.toggle("bad", ex.bad);
+  ui.verdict.classList.toggle("open", run.status === "truncated");
   ui.why.textContent = ex.text;
   ui.why.classList.toggle("bad", ex.bad);
 }
@@ -75,7 +76,7 @@ function renderRun(ui, promptTokens, run, color, tip) {
 async function makeEditor(host, onChange) {
   const { EditorView, keymap, lineNumbers, EditorState, python, history, historyKeymap, defaultKeymap, HighlightStyle, syntaxHighlighting, tags } =
     await import("../vendor/cm.js");
-  const style = HighlightStyle.define([{ tag: tags.keyword, fontWeight: "600" }, { tag: tags.comment, color: "#9aa0a8" }]);
+  const style = HighlightStyle.define([{ tag: tags.keyword, fontWeight: "700" }, { tag: tags.comment, color: "#5C5C66" }]);
   let quiet = false;
   const view = new EditorView({
     parent: host,
@@ -83,8 +84,9 @@ async function makeEditor(host, onChange) {
       doc: "",
       extensions: [lineNumbers(), history(), keymap.of([...defaultKeymap, ...historyKeymap]), python(), syntaxHighlighting(style), EditorView.lineWrapping,
         EditorView.updateListener.of((u) => u.docChanged && !quiet && onChange(u.state.doc.toString())),
-        EditorView.theme({ "&": { color: "#e6e8eb", backgroundColor: "#0c0d0f" }, ".cm-gutters": { backgroundColor: "#0c0d0f", color: "#6c727b", border: "none" },
-          ".cm-activeLine": { backgroundColor: "#1a1d22" }, ".cm-cursor": { borderLeftColor: "#e6e8eb" } }, { dark: true })],
+        EditorView.theme({ "&": { color: "#16161A", backgroundColor: "#FFFFFF" }, ".cm-gutters": { backgroundColor: "#FFFFFF", color: "#5C5C66", border: "none" },
+          ".cm-activeLine": { backgroundColor: "transparent" }, ".cm-activeLineGutter": { backgroundColor: "transparent" }, ".cm-cursor": { borderLeftColor: "#16161A" },
+          ".cm-selectionBackground, &.cm-focused .cm-selectionBackground": { backgroundColor: "#FFE066" } }, { dark: false })],
     }),
   });
   return {
@@ -97,65 +99,63 @@ export async function initPlayground(root, D) {
   const ex = D.explorer, pal = D.palette;
   const tip = tooltip(root);
   const st = { prompt: 0, ngram: "ngram5", mlp: "mlp20" };
-  const side = el("div", "pg-side"), main = el("div", "pg-main");
-  root.append(side, main);
-  const items = [];
-  [["test_id", "From seen repositories"], ["test_ood", "From unseen repositories"]].forEach(([set, title]) => {
-    side.appendChild(el("div", "pg-group", title));
-    ex.prompts.forEach((p, i) => {
-      if (p.set !== set) return;
-      const b = el("button", "pg-item");
-      b.type = "button";
-      b.append(el("span", "fn", p.func_name), el("span", "rp", p.repository_name));
-      b.addEventListener("click", () => { st.prompt = i; show(); });
-      side.appendChild(b);
-      items[i] = b;
-    });
+  const name = (id) => (isNgram(id) ? `<span class="k-ngram">n-gram</span> order ${id.slice(5)}` : `<span class="k-mlp">MLP</span> context ${id.slice(3)}`);
+  // function picker: the saved test prompts, grouped by seen / unseen repository
+  const pick = el("select");
+  pick.setAttribute("aria-label", "Test function");
+  [["test_id", "From repositories seen in training"], ["test_ood", "From repositories never seen"]].forEach(([set, title]) => {
+    const g = el("optgroup"); g.label = title;
+    ex.prompts.forEach((p, i) => { if (p.set === set) g.appendChild(Object.assign(el("option", "", `${p.func_name} (${p.repository_name})`), { value: i })); });
+    pick.appendChild(g);
   });
-  const ctl = el("div", "ctl");
-  const seg = (ids, key, label) => {
-    const s = el("div", "seg");
-    s.setAttribute("role", "group");
-    s.setAttribute("aria-label", label);
-    ids.forEach((id) => {
-      const b = el("button");
-      b.type = "button";
-      const dot = el("i");
-      dot.style.background = modelColor(id, pal);
-      dot.style.borderRadius = isNgram(id) ? "1px" : "50%";
-      b.append(dot, document.createTextNode(isNgram(id) ? id.slice(5) : id.slice(3)));
-      b.dataset.id = id;
-      b.addEventListener("click", () => { st[key] = id; show(); });
-      s.appendChild(b);
-    });
-    return s;
-  };
-  ctl.append(el("span", "lab", "n-gram order"), seg(MODEL_IDS.filter(isNgram), "ngram", "n-gram order"),
-    el("span", "lab", "MLP context"), seg(MODEL_IDS.filter((m) => !isNgram(m)), "mlp", "MLP context"));
+  pick.addEventListener("change", () => { st.prompt = +pick.value; show(); });
+  const ngCh = choices(MODEL_IDS.filter(isNgram).map((id) => [id, id.slice(5)]), st.ngram, (v) => { st.ngram = v; show(); }, { kind: "ngram", label: "n-gram order" });
+  const mlCh = choices(MODEL_IDS.filter((m) => !isNgram(m)).map((id) => [id, id.slice(3)]), st.mlp, (v) => { st.mlp = v; show(); }, { kind: "mlp", label: "MLP context" });
+  // 1. what to compare
+  const ctl = el("div", "fig-ctl pg-bar");
+  const fnField = field("Test function", pick);
+  fnField.classList.add("pg-fn");
+  ctl.append(fnField, field("n-gram order", ngCh.el), field("MLP window, in tokens", mlCh.el));
+  // 2. the start both models were given, as an editor
+  const ed = el("div", "pg-ed");
+  const edHead = el("div", "pg-ed-head");
+  const edLab = el("span", "field-lab", "Start of the function, given to both models. Edit it to write your own.");
+  const edTag = el("span", "pg-tag", "edited");
+  edTag.hidden = true;
+  const reset = button("Undo my edits", "small");
+  reset.hidden = true;
+  edHead.append(edLab, edTag, reset);
   const edHost = el("div", "cm-host");
+  ed.append(edHead, edHost);
+  // 3. run the MLP live on an edited start
   const live = el("div", "pg-live");
-  const note = el("p", "note", "Edit the start of the function above to let the MLP continue your version.");
   const temp = el("select");
   temp.setAttribute("aria-label", "Temperature for live sampling");
-  D.validity.config.temperatures.forEach((t) => temp.appendChild(Object.assign(el("option", "", `temperature ${fmt.t(t)}`), { value: t })));
-  const btn = Object.assign(el("button", "btn primary", "Continue with the MLP"), { type: "button", disabled: true });
-  live.append(note, temp, btn);
+  D.validity.config.temperatures.forEach((t) => temp.appendChild(Object.assign(el("option", "", fmt.t(t)), { value: t })));
+  const btn = button("Continue with the MLP", "primary");
+  btn.disabled = true;
+  const note = el("p", "note pg-status", "");
+  note.setAttribute("aria-live", "polite");
+  live.append(field("Temperature", temp), btn, note);
+  // 4. what each model wrote
   const pair = el("div", "pair");
-  const outN = el("div", "out"), outM = el("div", "out");
+  const outN = el("div", "out is-ngram"), outM = el("div", "out is-mlp");
   pair.append(outN, outM);
   const scale = el("div", "scale");
   scale.append(document.createTextNode("model was unsure"));
   [0, 0.25, 0.5, 0.75, 1].forEach((p) => { const s = el("span", "step"); s.style.background = shade(pal.mlp[20], p).bg; scale.append(s); });
   scale.append(document.createTextNode("model was sure"));
-  main.append(ctl, edHost, live, pair, scale);
+  root.append(ctl, ed, live, pair, scale);
 
   let preset = "";
   const editor = await makeEditor(edHost, (text) => {
     const custom = text !== preset;
     btn.disabled = !custom;
+    edTag.hidden = reset.hidden = !custom;
     if (custom) {
-      note.textContent = "Edited: the n-gram samples exist only for the preset functions. Press the button to let the MLP continue your version.";
-      outN.replaceChildren(el("p", "note", "No n-gram output for an edited start."));
+      note.textContent = "The n-gram samples exist only for the saved starts. Press the button to let the MLP continue your version.";
+      const ui = output(outN, name(st.ngram), "");
+      ui.body.appendChild(el("p", "note", "No n-gram sample for an edited start."));
     }
   });
   const maxNew = D.validity.config.max_new_tokens ?? 256;
@@ -164,16 +164,18 @@ export async function initPlayground(root, D) {
     preset = toSource(p.prompt_tokens);
     editor.set(preset);
     btn.disabled = true;
-    note.textContent = "Edit the start of the function above to let the MLP continue your version.";
-    items.forEach((b, i) => b.setAttribute("aria-pressed", i === st.prompt));
-    root.querySelectorAll(".seg button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.id === st.ngram || b.dataset.id === st.mlp));
+    edTag.hidden = reset.hidden = true;
+    pick.value = st.prompt;
+    note.textContent = "Showing the samples saved by the test run. Edit the start to run the MLP yourself.";
+    ngCh.set(st.ngram); mlCh.set(st.mlp);
     for (const [box, id] of [[outN, st.ngram], [outM, st.mlp]]) {
-      const ui = output(box, modelLabel(id), modelColor(id, pal), isNgram(id));
+      const ui = output(box, name(id), "");
       renderRun(ui, p.prompt_tokens, ex.runs[id][st.prompt], modelColor(id, pal), tip);
     }
   }
   show();
 
+  reset.addEventListener("click", () => show());
   let liveMod = null, seed = 0;
   btn.addEventListener("click", async () => {
     btn.disabled = true;
@@ -181,7 +183,7 @@ export async function initPlayground(root, D) {
       liveMod ??= await import("./live.js");
       const id = st.mlp;
       const res = await liveMod.generate({ ctx: +id.slice(3), code: editor.get(), temperature: +temp.value, seed: seed++, maxNew, onStatus: (s) => (note.textContent = s) });
-      const ui = output(outM, `${modelLabel(id)} · live`, modelColor(id, pal), false);
+      const ui = output(outM, `${name(id)}, written live in your browser`, "");
       renderRun(ui, res.promptTokens, { tokens: res.tokens, p: res.p, top: res.top, status: res.status, check: res.check }, modelColor(id, pal), tip);
       note.textContent = `Written in your browser by the compressed model in ${fmt.int(res.ms)} ms.`;
     } catch (e) {
