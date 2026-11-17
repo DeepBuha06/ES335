@@ -1,7 +1,7 @@
 # ES 335 Project Proposal (submitted, revision 14)
 
 **Title:** Investigating Syntax Learning and Generalization in MLP-Based Python Code Generation
-**Member:** Buha Deep Maheshbhai (24110082)
+**Members:** Buha Deep Maheshbhai (24110082), Panchal Heet Chirag (24110235)
 **Expected tools:** Python, NumPy, pandas, scikit-learn, PyTorch, Jupyter Notebook, Matplotlib, Git, GitHub, HTML, CSS, JavaScript
 
 ## Research question
