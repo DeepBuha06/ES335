@@ -51,7 +51,7 @@ class P(HTMLParser):
 
 p = P()
 p.feed(html)
-ALLOWED = [r"Fig\.\s*\d+", r"ES 335", r"24110082"]
+ALLOWED = [r"Fig\.\s*\d+", r"ES 335", r"24110082", r"24110235"]
 for d, skip, tags in p.texts:
     if skip:
         continue
