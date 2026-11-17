@@ -210,6 +210,7 @@
 <section id="errors" class="sec">
 <h2 class="col">Errors</h2>
 <p class="col">Most rejected samples fail on a bracket: one that is never closed, or closed with the wrong kind.</p>
+<p class="col">Brackets are how a finished sample fails to parse. The remaining loss is mostly names. On repositories the models never saw, the context-<span data-v="perplexity.model_info.mlp20.context" data-f="int"></span> <span class="k-mlp">MLP</span> still has identifier loss of <span data-v="category_loss.mlp20.test_ood.identifier.mean_nll" data-f="f2"></span> nats, against <span data-v="category_loss.mlp20.test_ood.layout.mean_nll" data-f="f2"></span> nats for indentation and newlines.</p>
 <figure class="fig" id="fig-fail">
 <figcaption>Unbalanced brackets are the most common reason Python rejects a finished sample, for both models.</figcaption>
 </figure>
