@@ -33,7 +33,7 @@
 }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 120px; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 140px; }
 body { margin: 0; background: var(--white); color: var(--ink); font: 400 19px/1.6 var(--sans); }
 
 /* ---------------------------------------------------------------- one column for everything
@@ -183,16 +183,19 @@ input[type=range]:focus-visible { outline: 2px solid var(--mlp); outline-offset:
 
 /* ---------------------------------------------------------------- table of contents (one line) */
 /* Sticks under the fixed top bar once the reader scrolls past it, so every section is one click away from anywhere.
-   One line; on narrow screens it scrolls sideways. The white box-shadow (clipped to the nav's own height) fills the
+   Wraps on wide screens so every link shows; on phones it is one line that scrolls sideways. The white box-shadow (clipped to the nav's own height) fills the
    page width behind it so text never shows through at the sides. */
 .toc {
   position: sticky; top: 47px; z-index: 15; background: var(--white);
   box-shadow: 0 0 0 100vmax var(--white); clip-path: inset(0 -100vmax);
   margin-top: 48px; padding: 12px 0; border-top: 1px solid var(--hair); border-bottom: 1px solid var(--hair);
-  display: flex; flex-wrap: nowrap; gap: 20px; font-size: 16px; white-space: nowrap;
-  overflow-x: auto; scrollbar-width: none;
+  display: flex; flex-wrap: wrap; gap: 4px 20px; font-size: 16px; white-space: nowrap;
 }
-.toc::-webkit-scrollbar { display: none; }
+/* phones: one line that scrolls sideways, so the stuck list stays short */
+@media (max-width: 640px) {
+  .toc { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .toc::-webkit-scrollbar { display: none; }
+}
 .toc a { text-decoration: none; color: var(--ink-2); flex: none; text-underline-offset: 6px; }
 .toc a:hover { color: var(--ink); text-decoration: underline; }
 .toc a.on { color: var(--ink); text-decoration: underline 2px var(--ink); }
