@@ -30,6 +30,33 @@ function wireProgress() {
   update();
 }
 
+// Sticky table of contents: underline the section being read and keep its link in view on narrow screens
+function wireToc() {
+  const toc = document.querySelector(".toc");
+  if (!toc) return;
+  const links = [...toc.querySelectorAll("a")];
+  const secs = links.map((a) => document.querySelector(a.getAttribute("href")));
+  let ticking = false, cur = null;
+  const update = () => {
+    ticking = false;
+    const line = toc.getBoundingClientRect().bottom + 24;
+    let i = -1;
+    secs.forEach((s, k) => { if (s && s.getBoundingClientRect().top <= line) i = k; });
+    const a = links[i] || null;
+    if (a === cur) return;
+    if (cur) cur.classList.remove("on");
+    cur = a;
+    if (a) {
+      a.classList.add("on");
+      const l = a.offsetLeft, r = l + a.offsetWidth;
+      if (l < toc.scrollLeft || r > toc.scrollLeft + toc.clientWidth) toc.scrollTo({ left: l - 16, behavior: "smooth" });
+    }
+  };
+  window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  window.addEventListener("resize", update);
+  update();
+}
+
 // Reproduce: copy one command (the <code> next to the button) or all of them
 function wireCopy() {
   const copy = async (b, text) => {
@@ -88,6 +115,7 @@ async function main() {
   mount("copy", wireCopy);
   mount("demos", frameDemos);
   wireProgress();
+  wireToc();
   const pg = await import("./playground.js");
   await pg.initPlayground($("x-root"), D);
   document.dispatchEvent(new Event("site-ready"));
