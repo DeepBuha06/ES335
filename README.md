@@ -1,6 +1,10 @@
 # Syntax learning and generalization in MLP-based Python code generation
 
+<<<<<<< HEAD
 ES 335 project (Buha Deep Maheshbhai, 24110082; Panchal Heet Chirag, 24110235).
+=======
+ES 335 individual project (Buha Deep Maheshbhai, 24110082; Panchal Heet Chirag, 24110235).
+>>>>>>> 68111da58ecebf7926cfcb215bf045cb2cffa301
 
 I train fixed-context MLP language models (context 3, 5, 10, 20 tokens) and modified Kneser–Ney n-gram models
 (order 2–5) on Python functions from CodeSearchNet, and compare them on next-token perplexity, on the share of
