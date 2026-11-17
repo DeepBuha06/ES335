@@ -88,7 +88,7 @@
 </figure>
 <details class="col more">
 <summary>Full numbers</summary>
-<p>Dataset <span data-v="phase0_recon.source.hf_repo" data-f="txt"></span> at revision <code class="hash" data-v="phase0_recon.source.revision" data-f="txt"></code>. I pooled the official train, validation and test files and then made my own repository split, so the training split contains <span data-v="phase1_report.splits.train.orig_csn_split.test" data-f="int"></span> functions from the official test file. The seen-repository test holds out functions only; other functions from those repositories were used in training.</p>
+<p>Dataset <span data-v="phase0_recon.source.hf_repo" data-f="txt"></span> at revision <code class="hash" data-v="phase0_recon.source.revision" data-f="txt"></code>. We pooled the official train, validation and test files and then made our own repository split, so the training split contains <span data-v="phase1_report.splits.train.orig_csn_split.test" data-f="int"></span> functions from the official test file. The seen-repository test holds out functions only; other functions from those repositories were used in training.</p>
 <div class="tablewrap" id="tbl-splits"></div>
 </details>
 </section>
@@ -151,11 +151,12 @@
 <p class="col">The test sets were opened once, by one script, after every choice had been made on the validation split.</p>
 <ol class="steps wide">
 <li><b>Split by repository</b><span>Seed <span data-v="phase1_report.seed" data-f="int"></span>, before any model was trained.</span></li>
-<li><b>Tune on validation</b><span>Learning rate, hidden size, dropout and when to stop training.</span></li>
+<li><b>Tune on validation</b><span>Learning rate, hidden size, dropout and when to stop training. Validation numbers are therefore a little flattering; test numbers are not.</span></li>
 <li><b>Test once</b><span><code>scripts/phase4_eval.py</code> is the only script allowed to open the test files.</span></li>
 <li><b>Report</b><span>Every number on this page is read from that run&rsquo;s files.</span></li>
 </ol>
 <p class="col"><b>Perplexity</b> measures how surprised a model is by the real next token. It is how many tokens the model is, in effect, still choosing between: lower is better.</p>
+<p class="col">The two scores test different things. For perplexity the model always sees the real code before each guess, so one wrong guess cannot spoil the next. For valid Python the model writes the rest of the function from its own output, so an early mistake carries through to the end.</p>
 <p class="col"><b>Valid Python</b> is the share of finished completions that Python&rsquo;s own parser, <code>ast.parse</code>, accepts. Completions that hit the limit of <span data-v="validity.config.max_new_tokens" data-f="int"></span> tokens are counted separately.</p>
 <p class="col">Every <span class="k-mlp">MLP</span> number is a mean over <span data-v="perplexity.summary.mlp20.test_ood.n_seeds" data-f="int"></span> training seeds. The change from seen to unseen repositories comes with a bootstrap interval, made by resampling functions inside each test set.</p>
 <details class="col more">
@@ -233,8 +234,8 @@
 <li><b>Parsing is not correctness.</b> Code that Python accepts can still be useless. Nothing was executed.</li>
 <li><b>Easier than raw source.</b> Rare names become one unknown token, and strings, numbers, comments and docstrings are removed.</li>
 <li><b>Unfinished samples.</b> At temperature <span data-v="validity.config.temperatures.1" data-f="f1"></span> the longest-window <span class="k-mlp">MLP</span> leaves <span data-v="validity_by_model.mlp20.t05.all.truncated" data-f="int"></span> samples unfinished; the validity rate counts finished samples only.</li>
-<li><b>Tuning was limited.</b> Learning rate and hidden size were chosen at one window size with a short training budget.</li>
-<li><b>Pooled source files.</b> The official CodeSearchNet files were pooled before my split, and the length cap and near-duplicate filter ran before it too.</li>
+<li><b>Tuning was limited.</b> Learning rate and hidden size were chosen only with a <span data-v="perplexity.model_info.mlp10.context" data-f="int"></span>-token window and a short training budget, then reused for every other window.</li>
+<li><b>Pooled source files.</b> The official CodeSearchNet files were pooled before our split, and the length cap and near-duplicate filter ran before it too.</li>
 </ul>
 </section>
 
@@ -267,7 +268,7 @@
 <div class="wide repro-all"><button type="button" class="btn" id="copy-all">Copy all commands</button></div>
 <p class="col">Timings and outputs for each step are in the <a href="https://github.com/DeepBuha06/ES335">repository README</a>.</p>
 <h3 class="col">Tools and assistance</h3>
-<p class="col">AI coding assistants were used for coding, debugging, editing, and visualization, including Cursor for the text on this page and Claude Code for the page design. I checked the displayed numbers against the files in <code>site/data</code>. I am responsible for the code, the numbers, and the claims.</p>
+<p class="col">AI coding assistants were used for coding, debugging, editing, and visualization, including Cursor for the text on this page and Claude Code for the page design. We checked the displayed numbers against the files in <code>site/data</code>. We are responsible for the code, the numbers, and the claims.</p>
 <h3 class="col">Sources</h3>
 <ol class="col refs">
 <li>Hamel Husain, Ho-Hsiang Wu, Tiferet Gazit, Miltiadis Allamanis, and Marc Brockschmidt. CodeSearchNet Challenge: Evaluating the State of Semantic Code Search. arXiv:1909.09436, 2019. <a href="https://arxiv.org/abs/1909.09436">arxiv.org/abs/1909.09436</a></li>
